@@ -88,7 +88,7 @@ PurseButton < UIButton
 
 
 InventoryButton < Button
-  height: 20
+  height: 17
   margin-top: 2
   text-align: center
 
@@ -185,11 +185,6 @@ NonClosableMiniWindow
         anchors.horizontalCenter: prev.horizontalCenter
         margin-top: 4
 
-      PurseButton
-        anchors.left: slot3.left
-        anchors.bottom: slot3.top        
-        margin-bottom: 3
-
     SoulCapLabel
       id: capLabel
       anchors.top: inventorySlotsPanel.top
@@ -211,7 +206,7 @@ NonClosableMiniWindow
         type: horizontalBox
         fitChildren: false
       height: 13
-      width: 120
+      width: 110
       padding: 2
       anchors.top: parent.top
       anchors.left: parent.left
@@ -322,5 +317,10 @@ NonClosableMiniWindow
         anchors.right: prev.right
         margin-top: 3
         @onClick: modules.client_options.toggle()
+
+      PurseButton
+        anchors.top: optionsButton.bottom
+        anchors.left: optionsButton.left
+        margin-top: 3
 
 

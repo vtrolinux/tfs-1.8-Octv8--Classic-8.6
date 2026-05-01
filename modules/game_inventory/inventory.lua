@@ -86,20 +86,35 @@ Icons = {
     }
 }
 SkullIcons = {
+    [SkullYellow] = {
+        path = "/images/game/skulls/skull_yellow",
+        id = "skullIcon",
+        tooltip = tr("You are involved in a PvP situation")
+    },
     [SkullGreen] = {
-        path = "/images/game/states/skullgreen",
+        path = "/images/game/skulls/skull_green",
         id = "skullIcon",
         tooltip = tr("You are a member of a party")
     },
     [SkullWhite] = {
-        path = "/images/game/states/skullwhite",
+        path = "/images/game/skulls/skull_white",
         id = "skullIcon",
         tooltip = tr("You have attacked an unmarked player")
     },
     [SkullRed] = {
-        path = "/images/game/states/skullred",
+        path = "/images/game/skulls/skull_red",
         id = "skullIcon",
         tooltip = tr("You have killed too many unmarked players")
+    },
+    [SkullBlack] = {
+        path = "/images/game/skulls/skull_black",
+        id = "skullIcon",
+        tooltip = tr("You are a murderer")
+    },
+    [SkullOrange] = {
+        path = "/images/game/skulls/skull_orange",
+        id = "skullIcon",
+        tooltip = tr("You are involved in a PvP situation")
     }
 }
 InventorySlotStyles = {
@@ -240,7 +255,8 @@ function init()
         onFreeCapacityChange = onFreeCapacityChange
     })
     connect(LocalPlayer, {
-        onSkullChange = onSkullChange
+        onSkullChange = onSkullChange,
+        onEmblemChange = onEmblemChange
     })
     refresh()
     inventoryWindow:setup()
@@ -268,6 +284,7 @@ function toggleInventoryMinimize(state)
     -- Utility buttons
     local storeButton = controlsPanel:getChildById("storeButton")
     local stopButton = controlsPanel:getChildById("stopButton")
+    local purseButton = controlsPanel:getChildById("purseButton")
     local optionsButton = controlsPanel:getChildById("optionsButton")
     local questsButton = controlsPanel:getChildById("questsButton")
     local botButton = controlsPanel:getChildById("botButton")
@@ -285,6 +302,7 @@ function toggleInventoryMinimize(state)
         slotsPanel:hide()
         storeButton:hide()
         stopButton:hide()
+        purseButton:hide()
         optionsButton:hide()
         questsButton:hide()
         botButton:hide()
@@ -357,6 +375,7 @@ function toggleInventoryMinimize(state)
         slotsPanel:show()
         storeButton:show()
         stopButton:show()
+        purseButton:show()
         optionsButton:show()
         questsButton:show()
         botButton:show()
@@ -454,6 +473,10 @@ function toggleInventoryMinimize(state)
         questsButton:addAnchor(AnchorRight, 'optionsButton', AnchorRight)
         questsButton:setMarginTop(3)
 
+        purseButton:addAnchor(AnchorTop, 'questsButton', AnchorBottom)
+        purseButton:addAnchor(AnchorLeft, 'questsButton', AnchorLeft)
+        purseButton:setMarginTop(3)
+
         minimizeButton:setImageClip("0 0 14 14") -- "-" icon
     end
 
@@ -494,7 +517,8 @@ function terminate()
         onFreeCapacityChange = onFreeCapacityChange
     })
     disconnect(LocalPlayer, {
-        onSkullChange = onSkullChange
+        onSkullChange = onSkullChange,
+        onEmblemChange = onEmblemChange
     })
     inventoryWindow:destroy()
 
@@ -890,24 +914,48 @@ function onStatesChange(localPlayer, now, old)
 end
 
 
-function onSkullChange(localPlayer, skull)
-    local icon = conditionPanel:getChildById("skullIcon")
+function onEmblemChange(localPlayer, emblem)
+    local icon = conditionPanel:getChildById("emblemIcon")
 
-    if skull < SkullGreen then
+    if emblem == EmblemNone then
         if icon then
             icon:destroy()
         end
         return
     end
 
-    if SkullGreen <= skull or skull <= SkullRed then
-        local skullIcon = SkullIcons[skull]
-        icon = icon or g_ui.createWidget("ConditionWidget", conditionPanel)
+    local emblems = {
+        [EmblemGreen]  = { path = "/images/game/emblems/emblem_green",  tooltip = tr("You are in a white war (green emblem)") },
+        [EmblemRed]    = { path = "/images/game/emblems/emblem_red",    tooltip = tr("You are in a white war (red emblem)") },
+        [EmblemBlue]   = { path = "/images/game/emblems/emblem_blue",   tooltip = tr("You are in a white war (blue emblem)") },
+        [EmblemMember] = { path = "/images/game/emblems/emblem_member", tooltip = tr("You are a war member") },
+        [EmblemOther]  = { path = "/images/game/emblems/emblem_other",  tooltip = tr("You are at war with this player") },
+    }
 
+    local emblemData = emblems[emblem]
+    if emblemData then
+        icon = icon or g_ui.createWidget("ConditionWidget", conditionPanel)
+        icon:setId("emblemIcon")
+        icon:setImageSource(emblemData.path)
+        icon:setTooltip(emblemData.tooltip)
+    end
+end
+
+function onSkullChange(localPlayer, skull)
+    local icon = conditionPanel:getChildById("skullIcon")
+
+    if skull == SkullNone then
+        if icon then
+            icon:destroy()
+        end
+        return
+    end
+
+    local skullIcon = SkullIcons[skull]
+    if skullIcon then
+        icon = icon or g_ui.createWidget("ConditionWidget", conditionPanel)
         icon:setId(skullIcon.id)
         icon:setImageSource(skullIcon.path)
         icon:setTooltip(skullIcon.tooltip)
-
-        return
     end
 end
