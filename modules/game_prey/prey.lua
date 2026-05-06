@@ -55,7 +55,7 @@ function bonusDescription(bonusType, bonusValue, bonusGrade)
 		return "-"
 	end
 
-	return "Uknown bonus"
+	return "Unknown bonus"
 end
 
 function timeleftTranslation(timeleft, forPreyTimeleft)
@@ -109,7 +109,7 @@ local descriptionTable = {
 	shopPermButton = "Go to the Store to purchase the Permanent Prey Slot. Once you have completed the purchase, you can activate a prey here, no matter if your character is on a free or a Premium account.",
 	choosePreyButton = "Click on this button to confirm selected monsters as your prey creature for the next 2 hours hunting time.",
 	preyCandidate = "Select a new prey creature for the next 2 hours hunting time.",
-	rerollButton = "If you like to select another prey crature, click here to get a new list with 9 creatures to choose from.\nThe newly selected prey will be active for 2 hours hunting time again."
+	rerollButton = "If you would like to select another prey creature, click here to get a new list with 9 creatures to choose from.\nThe newly selected prey will be active for 2 hours hunting time again."
 }
 
 local function bindSideButtons()
