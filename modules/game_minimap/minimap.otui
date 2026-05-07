@@ -244,7 +244,7 @@ NonClosableMiniWindow
   id: minimapWindow
   @onClose: modules.game_minimap.onMiniWindowClose()
   &save: true
-  &autoOpen: 1
+  &autoOpen: 3
 
   NonClosableMiniWindowContents
     margin-top: 4

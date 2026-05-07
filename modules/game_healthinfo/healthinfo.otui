@@ -38,7 +38,7 @@ NonClosableMiniWindow
   id: healthInfoWindow
   @onClose: modules.game_healthinfo.onMiniWindowClose()
   &save: true
-  &autoOpen: 2
+  &autoOpen: 4
 
   NonClosableMiniWindowContents
     padding: 0 0 0 0

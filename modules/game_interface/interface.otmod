@@ -27,6 +27,7 @@ Module
     - game_spelllist
     - game_cooldown
     - game_modaldialog
+    - game_unjustifiedpoints
     - game_walking
     - game_itemselector
     - client_travel
@@ -39,6 +40,7 @@ Module
     - game_bot
     - game_imbuing
     - game_market
+    - game_ciclopedia
     - game_interface_postload
   @onLoad: init()
   @onUnload: terminate()

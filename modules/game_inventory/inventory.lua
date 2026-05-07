@@ -149,7 +149,6 @@ skillsButton = nil
 battleButton = nil
 vipButton = nil
 questButton = nil
-botButton = nil
 soulLabel = nil
 capLabel = nil
 conditionPanel = nil
@@ -186,7 +185,6 @@ function init()
     battleButton = inventoryWindow:recursiveGetChildById("battleButton")
     vipButton = inventoryWindow:recursiveGetChildById("vipButton")
     questButton = inventoryWindow:recursiveGetChildById("questButton")
-    botButton = inventoryWindow:recursiveGetChildById("botButton")
     fightOffensiveBox = inventoryWindow:recursiveGetChildById("fightOffensiveBox")
     fightBalancedBox = inventoryWindow:recursiveGetChildById("fightBalancedBox")
     fightDefensiveBox = inventoryWindow:recursiveGetChildById("fightDefensiveBox")
@@ -286,8 +284,8 @@ function toggleInventoryMinimize(state)
     local stopButton = controlsPanel:getChildById("stopButton")
     local purseButton = slotsPanel:getChildById("purseButton")
     local optionsButton = controlsPanel:getChildById("optionsButton")
+    local ciclopediaButton = controlsPanel:getChildById("ciclopediaButton")
     local questsButton = controlsPanel:getChildById("questsButton")
-    local botButton = controlsPanel:getChildById("botButton")
     local mountButton = controlsPanel:getChildById("mountButton")
 
     -- Combat boxes
@@ -305,8 +303,8 @@ function toggleInventoryMinimize(state)
         end
         stopButton:hide()
         optionsButton:hide()
+        ciclopediaButton:hide()
         questsButton:hide()
-        botButton:hide()
         mountButton:hide()
         if purseButton then
             purseButton:hide()
@@ -380,16 +378,16 @@ function toggleInventoryMinimize(state)
         if storeButton then
             storeButton:show()
         end
-        stopButton:show()
-        optionsButton:show()
-        questsButton:show()
-        botButton:show()
+        stopButton:hide()
+        optionsButton:hide()
+        ciclopediaButton:hide()
+        questsButton:hide()
         mountButton:show()
         if purseButton then
             purseButton:show()
         end
 
-        inventoryWindow:setHeight(172)
+        inventoryWindow:setHeight(170)
         inventoryWindow:setWidth(170)
 
         -- Cap and Soul restoration
@@ -457,17 +455,7 @@ function toggleInventoryMinimize(state)
         mountButton:setMarginTop(1)
         mountButton:setMarginLeft(0)
 
-        botButton:addAnchor(AnchorTop, 'safeFightBox', AnchorBottom)
-        botButton:addAnchor(AnchorLeft, 'fightDefensiveBox', AnchorLeft)
-        botButton:setMarginTop(1)
-        botButton:setMarginLeft(0)
-
-        mountButton:addAnchor(AnchorTop, 'botButton', AnchorTop)
-        mountButton:addAnchor(AnchorLeft, 'botButton', AnchorRight)
-        mountButton:setMarginTop(0)
-        mountButton:setMarginLeft(2)
-
-        stopButton:addAnchor(AnchorTop, 'botButton', AnchorBottom)
+        stopButton:addAnchor(AnchorTop, 'mountButton', AnchorBottom)
         stopButton:addAnchor(AnchorRight, 'safeFightBox', AnchorRight)
         stopButton:setMarginTop(5)
 
@@ -480,6 +468,11 @@ function toggleInventoryMinimize(state)
         optionsButton:addAnchor(AnchorLeft, 'questsButton', AnchorLeft)
         optionsButton:addAnchor(AnchorRight, 'questsButton', AnchorRight)
         optionsButton:setMarginTop(3)
+
+        ciclopediaButton:addAnchor(AnchorTop, 'optionsButton', AnchorBottom)
+        ciclopediaButton:addAnchor(AnchorLeft, 'optionsButton', AnchorLeft)
+        ciclopediaButton:addAnchor(AnchorRight, 'optionsButton', AnchorRight)
+        ciclopediaButton:setMarginTop(3)
 
         minimizeButton:setImageClip("0 0 14 14") -- "-" icon
     end

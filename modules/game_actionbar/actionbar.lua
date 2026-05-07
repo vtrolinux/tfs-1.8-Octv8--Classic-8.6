@@ -1393,6 +1393,10 @@ function updateCooldown(action)
 end
 
 function save()
+	if not settingsFile or settingsFile == "" then
+		return
+	end
+
 	local status, result = pcall(function ()
 		return json.encode(settings, 2)
 	end)

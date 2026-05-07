@@ -104,12 +104,12 @@ SoulCapLabel < GameLabel
   icon-source: /images/game/slots/soulcap
 
 NonClosableMiniWindow
-  height: 172
+  height: 170
   width: 170
   id: inventoryWindow
   @onClose: modules.game_inventory.onMiniWindowClose()
   &save: true
-  &autoOpen: 3
+  &autoOpen: 2
 
   NonClosableMiniWindowContents
     UIButton
@@ -128,7 +128,7 @@ NonClosableMiniWindow
       anchors.top: parent.top
       anchors.left: parent.left
       width: 115
-      height: 172
+      height: 165
 
       NeckSlot
         anchors.top: parent.top
@@ -264,21 +264,11 @@ NonClosableMiniWindow
         anchors.top: chaseModeBoxChase.bottom
         margin-top: 1
         
-      InventoryButton
-        id: botButton
-        !text: tr('Bot')
-        anchors.left: fightDefensiveBox.left
-        anchors.top: prev.bottom
-        margin-top: 1
-        width: 20
-        height: 20
-        @onClick: modules.game_bot.toggle()
-
       MountButton
         id: mountButton
-        anchors.left: botButton.right
-        anchors.top: botButton.top
-        margin-left: 2
+        anchors.left: safeFightBox.left
+        anchors.top: safeFightBox.bottom
+        margin-top: 1
 
       InventoryButton
         id: stopButton
@@ -287,6 +277,8 @@ NonClosableMiniWindow
         anchors.left: fightDefensiveBox.left
         anchors.right: safeFightBox.right
         margin-top: 5
+        visible: false
+        height: 0
         @onClick: function() g_game.cancelAttackAndFollow() end
 
       InventoryButton
@@ -296,6 +288,8 @@ NonClosableMiniWindow
         anchors.left: prev.left
         anchors.right: prev.right
         margin-top: 3
+        visible: false
+        height: 0
         @onClick: g_game.requestQuestLog()
 
       InventoryButton
@@ -305,6 +299,19 @@ NonClosableMiniWindow
         anchors.left: prev.left
         anchors.right: prev.right
         margin-top: 3
+        visible: false
+        height: 0
         @onClick: modules.client_options.toggle()
+
+      InventoryButton
+        id: ciclopediaButton
+        !text: tr('Ciclopedia')
+        anchors.top: prev.bottom
+        anchors.left: prev.left
+        anchors.right: prev.right
+        margin-top: 3
+        visible: false
+        height: 0
+        @onClick: if modules.game_ciclopedia then modules.game_ciclopedia.toggle() end
 
 
