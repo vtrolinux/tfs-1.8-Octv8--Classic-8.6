@@ -1,7 +1,7 @@
 MarketWindow < MainWindow
   id: marketWindow
   !text: tr('Market')
-  size: 820 600
+  size: 700 530
 
   @onEscape: Market.close()
 
