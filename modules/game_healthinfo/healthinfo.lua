@@ -244,12 +244,30 @@ function onMiniWindowClose()
 	end
 end
 
+local function shouldForceFullHpMpLabels()
+	return g_settings.getBoolean("displayFullHpMpPercent")
+end
+
+local function getDisplayedResourceText(value, maxValue)
+	if shouldForceFullHpMpLabels() then
+		if maxValue and maxValue > 0 then
+			local percent = math.floor((value * 100) / maxValue)
+			percent = math.max(0, math.min(100, percent))
+			return percent .. "%"
+		end
+
+		return "0%"
+	end
+
+	return tostring(value)
+end
+
 function onHealthChange(localPlayer, health, maxHealth)
 	if maxHealth < health then
 		maxHealth = health
 	end
 
-	healthInfoWindow:recursiveGetChildById("healthLabel"):setText(health)
+	healthInfoWindow:recursiveGetChildById("healthLabel"):setText(getDisplayedResourceText(health, maxHealth))
 	healthBar:setTooltip(tr(healthTooltip, health, maxHealth))
 	healthBar:setValue(health, 0, maxHealth)
 	topHealthBar:setText(health .. " / " .. maxHealth)
@@ -288,7 +306,7 @@ function onManaChange(localPlayer, mana, maxMana)
 		maxMana = mana
 	end
 
-	healthInfoWindow:recursiveGetChildById("manaLabel"):setText(mana)
+	healthInfoWindow:recursiveGetChildById("manaLabel"):setText(getDisplayedResourceText(mana, maxMana))
 	manaBar:setTooltip(tr(manaTooltip, mana, maxMana))
 	manaBar:setValue(mana, 0, maxMana)
 	topManaBar:setText(mana .. " / " .. maxMana)
@@ -305,6 +323,21 @@ function onManaChange(localPlayer, mana, maxMana)
 
 	manaCircleFront:setImageClip(rect)
 	manaCircleFront:setImageRect(rect)
+end
+
+function refreshHealthManaDisplay()
+	if not g_game.isOnline() then
+		return
+	end
+
+	local localPlayer = g_game.getLocalPlayer()
+
+	if not localPlayer then
+		return
+	end
+
+	onHealthChange(localPlayer, localPlayer:getHealth(), localPlayer:getMaxHealth())
+	onManaChange(localPlayer, localPlayer:getMana(), localPlayer:getMaxMana())
 end
 
 function onLevelChange(localPlayer, value, percent)

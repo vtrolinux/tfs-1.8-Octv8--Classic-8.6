@@ -39,6 +39,7 @@ local defaultOptions = {
 	hotkeyDelay = 30,
 	turnDelay = 100,
 	displayText = true,
+	displayFullHpMpPercent = false,
 	topHealtManaBar = false,
 	hidePlayerBars = true,
 	enableMusicSound = false,
@@ -434,6 +435,10 @@ function setOption(key, value, force)
 		gameMapPanel:setDrawHealthBarsOnTop(value)
 	elseif key == "displayText" then
 		gameMapPanel:setDrawTexts(value)
+	elseif key == "displayFullHpMpPercent" then
+		if modules.game_healthinfo and modules.game_healthinfo.refreshHealthManaDisplay then
+			modules.game_healthinfo.refreshHealthManaDisplay()
+		end
 	elseif key == "dash" then
 		g_game.setMaxPreWalkingSteps(2)
 	elseif key == "wsadWalking" then
