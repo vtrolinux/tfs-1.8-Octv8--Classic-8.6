@@ -61,6 +61,7 @@ using ThingPtr = std::shared_ptr<Thing>;
 using ItemPtr = std::shared_ptr<Item>;
 using ContainerPtr = std::shared_ptr<Container>;
 using CreaturePtr = std::shared_ptr<Creature>;
+using CreatureWeakPtr = std::weak_ptr<Creature>;
 using MonsterPtr = std::shared_ptr<Monster>;
 using NpcPtr = std::shared_ptr<Npc>;
 using PlayerPtr = std::shared_ptr<Player>;

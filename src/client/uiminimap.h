@@ -63,6 +63,7 @@ protected:
     virtual void onStyleApply(const std::string& styleName, const OTMLNodePtr& styleNode);
 
 private:
+    void ensureLayout();
     void update();
 
     Rect m_mapArea;

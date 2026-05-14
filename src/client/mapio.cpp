@@ -551,7 +551,8 @@ void Map::saveImage(const std::string& fileName, int minX, int minY, int maxX, i
     int spriteSize = g_sprites.spriteSize();
     // for generation time image is 2 tiles bigger, because of 64x64 items
     int extraBottomRightTiles = 2;
-    ImagePtr image(new Image(Size(spriteSize * (sizeX + extraBottomRightTiles), spriteSize * (sizeY + extraBottomRightTiles))));
+    ImagePtr image = std::make_shared<Image>(
+        Size(spriteSize * (sizeX + extraBottomRightTiles), spriteSize * (sizeY + extraBottomRightTiles)));
 
     int offset = 0;
     if (drawLowerFloors) {

@@ -349,16 +349,24 @@ public:
     bool isOnline() { return m_online; }
     bool isLogging() { return !m_online && m_protocolGame; }
     bool isDead() { return m_dead; }
-    bool isAttacking() { return !!m_attackingCreature && !m_attackingCreature->isRemoved(); }
-    bool isFollowing() { return !!m_followingCreature && !m_followingCreature->isRemoved(); }
+    bool isAttacking()
+    {
+        const CreaturePtr creature = m_attackingCreature.lock();
+        return creature && !creature->isRemoved();
+    }
+    bool isFollowing()
+    {
+        const CreaturePtr creature = m_followingCreature.lock();
+        return creature && !creature->isRemoved();
+    }
     bool isConnectionOk() { return m_protocolGame && m_protocolGame->getElapsedTicksSinceLastRead() < 5000; }
 
     int getPing() { return m_ping; }
     ContainerPtr getContainer(int index) { if (m_containers.find(index) == m_containers.end()) { return nullptr; } return m_containers[index]; }
     std::map<int, ContainerPtr> getContainers() { return m_containers; }
     std::map<int, Vip> getVips() { return m_vips; }
-    CreaturePtr getAttackingCreature() { return m_attackingCreature; }
-    CreaturePtr getFollowingCreature() { return m_followingCreature; }
+    CreaturePtr getAttackingCreature() { return m_attackingCreature.lock(); }
+    CreaturePtr getFollowingCreature() { return m_followingCreature.lock(); }
     void setServerBeat(int beat) { m_serverBeat = beat; }
     int getServerBeat() { return m_serverBeat; }
     void setCanReportBugs(bool enable) { m_canReportBugs = enable; }
@@ -427,8 +435,8 @@ private:
     void setFollowingCreature(const CreaturePtr& creature);
 
     LocalPlayerPtr m_localPlayer;
-    CreaturePtr m_attackingCreature;
-    CreaturePtr m_followingCreature;
+    CreatureWeakPtr m_attackingCreature;
+    CreatureWeakPtr m_followingCreature;
     ProtocolGamePtr m_protocolGame;
     std::map<int, ContainerPtr> m_containers;
     std::map<int, Vip> m_vips;

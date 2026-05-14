@@ -27,6 +27,8 @@
 #include <framework/xml/tinyxml.h>
 #include <framework/core/resourcemanager.h>
 
+#include <memory>
+
 CreatureManager g_creatures;
 
 static bool isInZone(const Position& pos/* placePos*/,
@@ -96,12 +98,9 @@ void Spawn::save(TiXmlElement* node)
 
     node->SetAttribute("radius", getRadius());
 
-    TiXmlElement* creatureNode = nullptr;
-
     for(const auto& pair : m_creatures) {
         const CreatureTypePtr& creature = pair.second;
-        if(!(creatureNode = new TiXmlElement(creature->getRace() == CreatureRaceNpc ? "npc" : "monster")))
-            stdext::throw_exception("Spawn::save: Ran out of memory while allocating XML element!  Terminating now.");
+        auto creatureNode = std::make_unique<TiXmlElement>(creature->getRace() == CreatureRaceNpc ? "npc" : "monster");
 
         creatureNode->SetAttribute("name", creature->getName());
         creatureNode->SetAttribute("spawntime", creature->getSpawnTime());
@@ -114,7 +113,8 @@ void Spawn::save(TiXmlElement* node)
         creatureNode->SetAttribute("y", placePos.y - c.y);
         creatureNode->SetAttribute("z", placePos.z);
 
-        node->LinkEndChild(creatureNode);
+        node->LinkEndChild(creatureNode.get());
+        creatureNode.release();
     }
 }
 
@@ -264,16 +264,20 @@ void CreatureManager::saveSpawns(const std::string& fileName)
         TiXmlDocument doc;
         doc.SetTabSize(2);
 
-        TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "UTF-8", "");
-        doc.LinkEndChild(decl);
+        auto decl = std::make_unique<TiXmlDeclaration>("1.0", "UTF-8", "");
+        doc.LinkEndChild(decl.get());
+        decl.release();
 
-        TiXmlElement* root = new TiXmlElement("spawns");
-        doc.LinkEndChild(root);
+        auto root = std::make_unique<TiXmlElement>("spawns");
+        TiXmlElement* rootNode = root.get();
+        doc.LinkEndChild(root.get());
+        root.release();
 
         for(auto pair : m_spawns) {
-            TiXmlElement* elem = new TiXmlElement("spawn");
-            pair.second->save(elem);
-            root->LinkEndChild(elem);
+            auto elem = std::make_unique<TiXmlElement>("spawn");
+            pair.second->save(elem.get());
+            rootNode->LinkEndChild(elem.get());
+            elem.release();
         }
 
         if(!doc.SaveFile("data"+fileName))

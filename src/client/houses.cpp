@@ -24,6 +24,8 @@
 
 #include <framework/core/resourcemanager.h>
 
+#include <memory>
+
 HouseManager g_houses;
 
 House::House()
@@ -170,16 +172,20 @@ void HouseManager::save(const std::string& fileName)
         TiXmlDocument doc;
         doc.SetTabSize(2);
 
-        TiXmlDeclaration* decl = new TiXmlDeclaration("1.0", "UTF-8", "");
-        doc.LinkEndChild(decl);
+        auto decl = std::make_unique<TiXmlDeclaration>("1.0", "UTF-8", "");
+        doc.LinkEndChild(decl.get());
+        decl.release();
 
-        TiXmlElement* root = new TiXmlElement("houses");
-        doc.LinkEndChild(root);
+        auto root = std::make_unique<TiXmlElement>("houses");
+        TiXmlElement* rootNode = root.get();
+        doc.LinkEndChild(root.get());
+        root.release();
 
         for(auto house : m_houses) {
-            TiXmlElement *elem = new TiXmlElement("house");
-            house->save(elem);
-            root->LinkEndChild(elem);
+            auto elem = std::make_unique<TiXmlElement>("house");
+            house->save(elem.get());
+            rootNode->LinkEndChild(elem.get());
+            elem.release();
         }
 
         if(!doc.SaveFile("data"+fileName))

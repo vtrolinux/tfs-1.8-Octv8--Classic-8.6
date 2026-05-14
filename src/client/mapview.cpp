@@ -560,8 +560,8 @@ Rect MapView::calcFramebufferSource(const Size& destSize, bool inNextFrame)
 {
     float scaleFactor = g_sprites.spriteSize()/(float)g_sprites.spriteSize();
     Point drawOffset = ((m_drawDimension - m_visibleDimension - Size(1,1)).toPoint()/2) * g_sprites.spriteSize();
-    if(isFollowingCreature())
-        drawOffset += m_followingCreature->getWalkOffset(inNextFrame) * scaleFactor;
+    if(CreaturePtr followingCreature = getFollowingCreature())
+        drawOffset += followingCreature->getWalkOffset(inNextFrame) * scaleFactor;
 
     Size srcSize = destSize;
     Size srcVisible = m_visibleDimension * g_sprites.spriteSize();
@@ -665,8 +665,8 @@ Point MapView::transformPositionTo2D(const Position& position, const Position& r
 
 Position MapView::getCameraPosition()
 {
-    if (isFollowingCreature()) {
-        return m_followingCreature->getPrewalkingPosition();
+    if (CreaturePtr followingCreature = getFollowingCreature()) {
+        return followingCreature->getPrewalkingPosition();
     }
 
     return m_customCameraPosition;

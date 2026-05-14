@@ -85,8 +85,8 @@ void Game::resetGameStates()
     m_chaseMode = Otc::DontChase;
     m_pvpMode = Otc::WhiteDove;
     m_safeFight = true;
-    m_followingCreature = nullptr;
-    m_attackingCreature = nullptr;
+    m_followingCreature.reset();
+    m_attackingCreature.reset();
     m_localPlayer = nullptr;
     m_pingSent = 0;
     m_pingReceived = 0;
@@ -210,13 +210,13 @@ void Game::processGameStart()
         }, m_pingDelay);
     }
 
-    m_checkConnectionEvent = g_dispatcher.cycleEvent([this] {
-        if(!g_game.isConnectionOk() && !m_connectionFailWarned) {
+    m_checkConnectionEvent = g_dispatcher.cycleEvent([] {
+        if(!g_game.isConnectionOk() && !g_game.m_connectionFailWarned) {
             g_lua.callGlobalField("g_game", "onConnectionFailing", true);
-            m_connectionFailWarned = true;
-        } else if(g_game.isConnectionOk() && m_connectionFailWarned) {
+            g_game.m_connectionFailWarned = true;
+        } else if(g_game.isConnectionOk() && g_game.m_connectionFailWarned) {
             g_lua.callGlobalField("g_game", "onConnectionFailing", false);
-            m_connectionFailWarned = false;
+            g_game.m_connectionFailWarned = false;
         }
     }, 1000);
 }
@@ -324,7 +324,9 @@ void Game::processTalk(const std::string& name, int level, Otc::MessageMode mode
 void Game::processOpenContainer(int containerId, const ItemPtr& containerItem, const std::string& name, int capacity, bool hasParent, const std::vector<ItemPtr>& items, bool isUnlocked, bool hasPages, int containerSize, int firstIndex)
 {
     ContainerPtr previousContainer = getContainer(containerId);
-    const auto& container(ContainerPtr(new Container(containerId, capacity, name, containerItem, hasParent, isUnlocked, hasPages, containerSize, firstIndex)));
+
+    const ContainerPtr container = std::make_shared<Container>(
+        containerId, capacity, name, containerItem, hasParent, isUnlocked, hasPages, containerSize, firstIndex);
     m_containers[containerId] = container;
     container->onAddItems(items);
 
@@ -960,7 +962,7 @@ void Game::attack(CreaturePtr creature)
         return;
 
     // cancel when attacking again
-    if(creature && creature == m_attackingCreature)
+    if(creature && creature == getAttackingCreature())
         creature = nullptr;
 
     if(creature && isFollowing())
@@ -987,7 +989,7 @@ void Game::follow(CreaturePtr creature)
     }
 
     // cancel when following again
-    if(creature && creature == m_followingCreature)
+    if(creature && creature == getFollowingCreature())
         creature = nullptr;
 
     if(creature && isAttacking())
@@ -1612,8 +1614,8 @@ void Game::setClientVersion(int version)
 
 void Game::setAttackingCreature(const CreaturePtr& creature)
 {
-    if(creature != m_attackingCreature) {
-        CreaturePtr oldCreature = m_attackingCreature;
+    const CreaturePtr oldCreature = getAttackingCreature();
+    if(creature != oldCreature) {
         m_attackingCreature = creature;
 
         g_lua.callGlobalField("g_game", "onAttackingCreatureChange", creature, oldCreature);
@@ -1622,9 +1624,11 @@ void Game::setAttackingCreature(const CreaturePtr& creature)
 
 void Game::setFollowingCreature(const CreaturePtr& creature)
 {
-    CreaturePtr oldCreature = m_followingCreature;
-    m_followingCreature = creature;
+    const CreaturePtr oldCreature = getFollowingCreature();
+    if(creature == oldCreature)
+        return;
 
+    m_followingCreature = creature;
     g_lua.callGlobalField("g_game", "onFollowingCreatureChange", creature, oldCreature);
 }
 

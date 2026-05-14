@@ -33,6 +33,8 @@
 #include <framework/graphics/framebuffermanager.h>
 #include <framework/graphics/shadermanager.h>
 
+#include <memory>
+
 Outfit::Outfit()
 {
     m_category = ThingCategoryCreature;
@@ -303,8 +305,10 @@ void Outfit::draw(Point dest, Otc::Direction direction, uint walkAnimationPhase,
                     continue;
                 if (yPattern == 0)
                     center = outfitParams->dest.center();
-                DrawQueueItemTexturedRect* outfit = new DrawQueueItemOutfitWithShader(outfitParams->dest, outfitParams->texture, outfitParams->src, outfitParams->offset, center, 0, m_shader);
-                g_drawQueue->add(outfit);
+                auto outfit = std::make_unique<DrawQueueItemOutfitWithShader>(
+                    outfitParams->dest, outfitParams->texture, outfitParams->src, outfitParams->offset, center, 0, m_shader);
+                g_drawQueue->add(outfit.get());
+                outfit.release();
                 continue;
             }
             type->draw(dest, 0, direction, yPattern, zPattern, animationPhase, Color::white, lightView);
@@ -316,15 +320,18 @@ void Outfit::draw(Point dest, Otc::Direction direction, uint walkAnimationPhase,
         if (!outfitParams)
             continue;
 
-        DrawQueueItemTexturedRect* outfit = nullptr;
+        std::unique_ptr<DrawQueueItemTexturedRect> outfit;
         if (m_shader.empty())
-            outfit = new DrawQueueItemOutfit(outfitParams->dest, outfitParams->texture, outfitParams->src, outfitParams->offset, colors, outfitParams->color);
+            outfit = std::make_unique<DrawQueueItemOutfit>(
+                outfitParams->dest, outfitParams->texture, outfitParams->src, outfitParams->offset, colors, outfitParams->color);
         else {
             if (yPattern == 0)
                 center = outfitParams->dest.center();
-            outfit = new DrawQueueItemOutfitWithShader(outfitParams->dest, outfitParams->texture, outfitParams->src, outfitParams->offset, center, colors, m_shader);
+            outfit = std::make_unique<DrawQueueItemOutfitWithShader>(
+                outfitParams->dest, outfitParams->texture, outfitParams->src, outfitParams->offset, center, colors, m_shader);
         }
-        g_drawQueue->add(outfit);
+        g_drawQueue->add(outfit.get());
+        outfit.release();
     }
 
     if (m_wings && (direction == Otc::North || direction == Otc::West)) {

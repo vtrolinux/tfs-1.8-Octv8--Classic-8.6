@@ -312,7 +312,7 @@ bool Minimap::loadImage(const std::string& fileName, const Position& topLeft, fl
 
 void Minimap::saveImage(const std::string& fileName, int minX, int minY, int maxX, int maxY, short z)
 {
-   ImagePtr image(new Image(Size(maxX - minX, maxY - minY)));
+   ImagePtr image = std::make_shared<Image>(Size(maxX - minX, maxY - minY));
 
    for (int x = minX; x < maxX; x++) {
            for (int y = minY; y < maxY; y++) {

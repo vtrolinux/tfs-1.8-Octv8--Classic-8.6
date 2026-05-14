@@ -31,10 +31,9 @@
 // @bindclass
 class Container : public LuaObject
 {
-protected:
+public:
     Container(int id, int capacity, const std::string& name, const ItemPtr& containerItem, bool hasParent, bool isUnlocked, bool hasPages, int containerSize, int firstIndex);
 
-public:
     ItemPtr getItem(int slot);
     std::deque<ItemPtr> getItems() { return m_items; }
     int getItemsCount() { return m_items.size(); }

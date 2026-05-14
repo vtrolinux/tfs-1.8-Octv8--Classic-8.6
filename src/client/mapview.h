@@ -72,8 +72,8 @@ public:
 
     // camera related
     void followCreature(const CreaturePtr& creature);
-    CreaturePtr getFollowingCreature() { return m_followingCreature; }
-    bool isFollowingCreature() { return m_followingCreature && m_follow; }
+    CreaturePtr getFollowingCreature() { return m_followingCreature.lock(); }
+    bool isFollowingCreature() { return m_follow && !m_followingCreature.expired(); }
 
     void setCameraPosition(const Position& pos);
     Position getCameraPosition();
@@ -166,7 +166,7 @@ private:
 
     stdext::boolean<true> m_follow;
     std::vector<TilePtr> m_cachedVisibleTiles[Otc::MAX_Z + 1];
-    CreaturePtr m_followingCreature;
+    CreatureWeakPtr m_followingCreature;
     Otc::DrawFlags m_drawFlags;
     bool m_drawLight = false;
     float m_minimumAmbientLight;
