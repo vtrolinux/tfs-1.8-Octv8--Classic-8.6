@@ -934,15 +934,27 @@ void ProtocolGame::sendBugReport(const std::string& comment)
 
 void ProtocolGame::sendRuleViolation(const std::string& target, int reason, int action, const std::string& comment, const std::string& statement, int statementId, bool ipBanishment)
 {
+    (void)ipBanishment;
+
     auto msg = std::make_shared<OutputMessage>();
-    msg->addU8(Proto::ClientRuleViolation);
-    msg->addString(target);
+    msg->addU8(Proto::ClientNewRuleViolation);
+    uint8_t reportType = 2;
+    if(action == 6) {
+        reportType = 1;
+    } else if(action == 1 || action == 3 || action == 5) {
+        reportType = 0;
+    }
+
+    msg->addU8(reportType);
     msg->addU8(reason);
-    msg->addU8(action);
+    msg->addString(target);
     msg->addString(comment);
-    msg->addString(statement);
-    msg->addU16(statementId);
-    msg->addU8(ipBanishment);
+    if(reportType == 0) {
+        msg->addString(statement);
+    } else if(reportType == 1) {
+        msg->addString(statement);
+        msg->addU32(statementId);
+    }
     send(msg);
 }
 

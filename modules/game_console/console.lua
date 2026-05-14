@@ -185,6 +185,14 @@ bugReportTab = nil
 playerReportTab = nil
 radioTabs = nil
 floatingMode = false
+local playerReportReasons = {
+	{ text = tr("Rule violation / abuse"), reason = 11 },
+	{ text = tr("Bug abuse"), reason = 12 },
+	{ text = tr("Bot / hack / unofficial software"), reason = 13 },
+	{ text = tr("Offensive behavior"), reason = 5 },
+	{ text = tr("Spam or advertising"), reason = 6 },
+	{ text = tr("Other"), reason = 20 }
+}
 local communicationSettings = {
 	useWhiteList = true,
 	useIgnoreList = true,
@@ -612,6 +620,19 @@ function sendGetGroup()
 	p:send(msg)
 end
 
+local function sendPlayerRuleViolationReport(targetName, reportReason, comment)
+	local msg = OutputMessage.create()
+
+	msg:addU8(0xF2)
+	msg:addU8(2) -- REPORT_TYPE_BOT / player behavior report
+	msg:addU8(reportReason)
+	msg:addString(targetName)
+	msg:addString(comment)
+
+	local p = g_game.getProtocolGame()
+	p:send(msg)
+end
+
 function openReportWindow()
 	if reportWindow then
 		return
@@ -628,6 +649,12 @@ function openReportWindow()
 	reportWindow = g_ui.loadUI("reportwindow", rootWidget)
 	bugReportTab = reportWindow:getChildById("bugReportTab")
 	playerReportTab = reportWindow:getChildById("playerReportTab")
+	local playerReasonBox = reportWindow:getChildById("playerReasonBox")
+	if playerReasonBox then
+		for _, reportReason in ipairs(playerReportReasons) do
+			playerReasonBox:addOption(reportReason.text, reportReason.reason)
+		end
+	end
 	radioTabs = UIRadioGroup.create()
 
 	radioTabs:addWidget(bugReportTab)
@@ -661,7 +688,24 @@ function openReportWindow()
 			g_game.reportBug(text)
 			modules.game_textmessage.displayGameMessage(tr("Bug report sent."))
 		elseif playerReportTab and playerReportTab:isChecked() then
-			g_game.talkChannel(MessageModes.RVRChannel, 0, text)
+			local playerNameEdit = reportWindow:getChildById("playerNameText")
+			local playerReasonBox = reportWindow:getChildById("playerReasonBox")
+			local targetName = playerNameEdit and playerNameEdit:getText() or ""
+			local reasonOption = playerReasonBox and playerReasonBox:getCurrentOption()
+			local reportReason = reasonOption and reasonOption.data or 11
+
+			if targetName == "" then
+				displayErrorBox(tr("Error"), tr("You must enter a player name."))
+				return
+			end
+
+			if text == "" then
+				displayErrorBox(tr("Error"), tr("You must enter a comment."))
+				return
+			end
+
+			sendPlayerRuleViolationReport(targetName, reportReason, text)
+			modules.game_textmessage.displayGameMessage(tr("Player report sent."))
 		end
 
 		player:unlockWalk()

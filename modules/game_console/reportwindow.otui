@@ -1,7 +1,7 @@
 MainWindow
   id: reportWindow
   !text: tr('Send a report to the admins.')
-  size: 400 340
+  size: 400 370
 
   TabButton
     id: bugReportTab
@@ -32,6 +32,36 @@ MainWindow
     anchors.top: bugReportTab.bottom
     margin: 8 0
 
+  Label
+    id: playerNameLabel
+    !text: tr('Player name') .. ':'
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: prev.bottom
+    margin-top: 8
+
+  TextEdit
+    id: playerNameText
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: prev.bottom
+    margin-top: 2
+    max-length: 32
+
+  Label
+    id: playerReasonLabel
+    !text: tr('Reason') .. ':'
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: prev.bottom
+    margin-top: 8
+
+  ComboBox
+    id: playerReasonBox
+    anchors.left: parent.left
+    anchors.right: parent.right
+    anchors.top: prev.bottom
+    margin-top: 2
 
   TextEdit
     id: text
