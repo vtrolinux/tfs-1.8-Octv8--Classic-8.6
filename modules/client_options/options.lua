@@ -5,6 +5,7 @@ local defaultOptions = {
 	fullscreen = false,
 	showPing = true,
 	showFps = true,
+	hdmodeBox = true,
 	vsync = true,
 	botSoundVolume = 0,
 	floorFading = 100,
@@ -142,7 +143,7 @@ function init()
 	})
 	subWindows.graphics = createSubWindow("graphicsWindow", tr("Graphics"), "graphics", {
 		width = 270,
-		height = 440
+		height = 470
 	})
 	subWindows.console = createSubWindow("consoleWindow", tr("Console"), "console", {
 		width = 320,
@@ -447,6 +448,10 @@ function setOption(key, value, force)
 		end
 	elseif key == "antialiasing" then
 		g_app.setSmooth(value)
+	elseif key == "hdmodeBox" then
+		if g_sprites and g_sprites.setScaleFactor then
+			g_sprites.setScaleFactor(value and 2 or 1)
+		end
 	end
 
 	for _, win in pairs(subWindows) do
@@ -475,7 +480,7 @@ function setOption(key, value, force)
 		modules.client_profiles.onProfileChange()
 	end
 
-	if key == "classicView" or key == "rightPanels" or key == "leftPanels" or key == "cacheMap" then
+	if key == "classicView" or key == "rightPanels" or key == "leftPanels" or key == "cacheMap" or key == "hdmodeBox" then
 		modules.game_interface.refreshViewMode()
 	elseif key:find("actionbar") then
 		if modules.game_actionbar then

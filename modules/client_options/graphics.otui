@@ -65,6 +65,18 @@ OptionPanel
       anchors.top: parent.top
       margin: 5
 
+  FlatPanel
+    height: 22
+    margin-top: 8
+
+    OptionCheckBox
+      id: hdmodeBox
+      !text: tr('Enable HD Graphics')
+      anchors.left: parent.left
+      anchors.right: parent.right
+      anchors.top: parent.top
+      margin: 5
+
   Label
     margin-top: 12
     id: optimizationLevelLabel
@@ -196,5 +208,4 @@ OptionPanel
     margin-top: 3
     minimum: 0
     maximum: 100
-
 
