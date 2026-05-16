@@ -40,6 +40,9 @@ function init()
   npcWindow = g_ui.loadUI('npctrade', modules.game_interface.getRightPanel())
   npcWindow:setVisible(false)
   npcWindow:setup()
+  if npcWindow:isResizeable() and npcWindow:getHeight() < npcWindow:getMinimumHeight() then
+    npcWindow:setHeight(npcWindow:getMinimumHeight())
+  end
 
   itemsPanel = npcWindow:recursiveGetChildById('itemsPanel')
   searchText = npcWindow:recursiveGetChildById('searchText')

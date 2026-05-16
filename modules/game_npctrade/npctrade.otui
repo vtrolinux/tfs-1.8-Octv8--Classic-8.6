@@ -92,17 +92,19 @@ MiniWindow
       margin-right: -0
 
     Panel
-      height: 200
+      id: itemsContainer
       width: 180
       anchors.left: parent.left
-      anchors.top: prev.bottom
+      anchors.top: sellTab.bottom
+      anchors.bottom: searchText.top
       margin-top: 5
+      margin-bottom: 8
       margin-left: 14
 
       VerticalScrollBar
         id: itemsPanelListScrollBar
-        height: 200
-        anchors.top: prev.bottom
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         anchors.right: parent.right
         margin-right: 15
         step: 24
@@ -110,7 +112,6 @@ MiniWindow
 
       ScrollablePanel
         id: itemsPanel
-        height: 200
         anchors.left: parent.left
         anchors.right: prev.left
         anchors.top: parent.top
@@ -124,10 +125,10 @@ MiniWindow
     TextEdit
       id: searchText
       anchors.left: parent.left
-      anchors.top: parent.top
+      anchors.bottom: setupPanel.top
       width: 165
       margin-left: 15
-      margin-top: 270
+      margin-bottom: 8
       placeholder: Type to search
       @onClick: modules.client_textedit.show(self)
       @onTextChange: modules.game_npctrade.onSearchTextChange()     
@@ -138,8 +139,8 @@ MiniWindow
       width: 170
       enabled: false
       anchors.left: parent.left
-      anchors.top: prev.bottom
-      margin-top: 10
+      anchors.bottom: buyOptions.top
+      margin-bottom: 5
       margin-left: 10
       image-color: #ffffff88 
   
@@ -186,8 +187,8 @@ MiniWindow
       height: 35
       width: 170
       anchors.left: parent.left
-      anchors.top: prev.bottom
-      margin-top: 5
+      anchors.bottom: tradeButton.top
+      margin-bottom: 5
       margin-left: 10
       image-color: #ffffff88
 
@@ -235,16 +236,16 @@ MiniWindow
         checked: true
         @onCheckChange: modules.game_npctrade.onShowAllItemsChange()
 
-      Button
-        id: tradeButton
-        !text: tr('OK')
-        width: 50
-        height: 20
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        margin-right: 10
-        margin-bottom: 10
-        @onClick: modules.game_npctrade.onTradeClick()
+    Button
+      id: tradeButton
+      !text: tr('OK')
+      width: 50
+      height: 20
+      anchors.right: parent.right
+      anchors.bottom: parent.bottom
+      margin-right: 25
+      margin-bottom: 8
+      @onClick: modules.game_npctrade.onTradeClick()
 
   ResizeBorder
     id: bottomResizeBorder
@@ -252,7 +253,7 @@ MiniWindow
     anchors.left: parent.left
     anchors.right: parent.right
     height: 3
-    minimum: 48
+    minimum: 315
     margin-left: 3
     margin-right: 3
     background: #ffffff88    
