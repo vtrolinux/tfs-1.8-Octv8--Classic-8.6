@@ -60,6 +60,7 @@ function refreshContainerItems(container)
 		local slotItem = container:getItem(slot)
 
 		itemWidget:setItem(slotItem)
+		ItemsDatabase.setTier(itemWidget, slotItem)
 
 		-- No rarity logic
 
@@ -225,6 +226,7 @@ function onContainerOpen(container, previousContainer)
 		local slotItem = container:getItem(slot)
 
 		itemWidget:setItem(slotItem)
+		ItemsDatabase.setTier(itemWidget, slotItem)
 
 		-- No rarity logic
 
@@ -287,6 +289,7 @@ function onContainerUpdateItem(container, slot, item, oldItem)
 	local itemWidget = container.itemsPanel:getChildById("item" .. slot)
 
 	itemWidget:setItem(item)
+	ItemsDatabase.setTier(itemWidget, item)
 
 	-- No rarity logic
 

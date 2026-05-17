@@ -46,6 +46,7 @@ Item::Item() :
     m_color(Color::alpha),
     m_async(true),
     m_quickLootFlags(0),
+    m_tier(0),
     m_phase(0),
     m_lastPhase(0),
     m_durationTime(0),

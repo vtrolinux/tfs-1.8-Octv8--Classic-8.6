@@ -655,6 +655,7 @@ local function updateSelectedItem(widget)
 
 	if Market.isItemSelected() then
 		selectedItem:setItem(selectedItem.item.displayItem)
+		ItemsDatabase.setTier(selectedItem, selectedItem.item.displayItem)
 		nameLabel:setText(selectedItem.item.marketData.name)
 		clearOffers()
 		Market.enableCreateOffer(true)
@@ -1292,6 +1293,7 @@ function Market.clearSelectedItem()
 		radioItemSet:selectWidget(nil)
 		nameLabel:setText("No item selected.")
 		selectedItem:setItem(nil)
+		ItemsDatabase.setTier(selectedItem, nil)
 
 		selectedItem.item = nil
 
@@ -1420,6 +1422,7 @@ function Market.refreshItemsWidget(selectItem)
 		local itemWidget = itemBox:getChildById("item")
 
 		itemWidget:setItem(item.displayItem)
+		ItemsDatabase.setTier(itemWidget, item.displayItem)
 
 		local amount = Market.getDepotCount(item.marketData.tradeAs)
 

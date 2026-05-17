@@ -43,6 +43,11 @@ function load()
 		errorMessage = errorMessage .. tr("Unable to load spr file, please place a valid spr in '%s'", sprPath)
 	end
 
+	local otmlPath = datPath .. ".otml"
+	if errorMessage:len() == 0 and g_resources.fileExists(otmlPath) then
+		g_things.loadOtml(otmlPath)
+	end
+
 	loaded = errorMessage:len() == 0
 
 	if errorMessage:len() > 0 then

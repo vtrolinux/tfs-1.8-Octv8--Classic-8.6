@@ -391,6 +391,7 @@ function setupButton(widget)
 		widget.item:setItemId(0)
 	end
 
+	ItemsDatabase.setTier(widget.item, nil)
 	widget.item:setOn(false)
 
 	widget.autoSay = nil
@@ -412,8 +413,13 @@ function setupButton(widget)
 
 		widget.text:setText(config.sayText or "")
 
-		if widget.item:getItemId() ~= (config.itemId and config.itemId > 100 and config.itemId or 0) then
-			widget.item:setItem(Item.create(config.itemId, 50))
+		if config.itemId and config.itemId > 100 then
+			local item = Item.create(config.itemId, 50)
+			if config.tier and item.setTier then
+				item:setTier(config.tier)
+			end
+			widget.item:setItem(item)
+			ItemsDatabase.setTier(widget.item, item)
 		end
 
 		widget.sayText = config.sayText
@@ -689,6 +695,10 @@ function assignItem(widget)
 		}
 		settings[widget:getId()].itemId = window.item:getItemId()
 		settings[widget:getId()].type = TYPE.ITEM
+		local assignedItem = window.item:getItem()
+		if assignedItem and assignedItem.getTier then
+			settings[widget:getId()].tier = assignedItem:getTier()
+		end
 		local selected = radio:getSelectedWidget():getId()
 
 		if selected == "useSelf" then
@@ -1227,6 +1237,10 @@ function setupAction(widget)
 			elseif widget.action == ACTION.EQUIP then
 				if g_game.getClientVersion() >= 860 then
 					local item = Item.create(widget.item:getItemId())
+					local actionItem = widget.item:getItem()
+					if actionItem and actionItem.getTier and item.setTier then
+						item:setTier(actionItem:getTier())
+					end
 
 					return g_game.equipItem(item)
 				end

@@ -96,6 +96,7 @@ public:
     void setQuickLootFlags(uint32 flags) { m_quickLootFlags = flags; }
     void setShader(const std::string& str) { m_shader = str; }
     void setDurationTime(uint64 value) { m_durationTime = value; }
+    void setTier(uint8 tier) { m_tier = tier; }
     void setDurationIsPaused(bool value) {
         m_durationIsPaused = value;
         if (m_durationIsPaused) {
@@ -115,6 +116,7 @@ public:
     uint32 getQuickLootFlags() { return m_quickLootFlags; }
     std::string getShader() { return m_shader; }
     uint64 getDurationTime() { return m_durationTime; }
+    uint8 getTier() { return m_tier; }
     ticks_t getDurationTimePaused() { return m_durationTimePaused; }
     bool isDurationPaused() const { return m_durationIsPaused; }
 
@@ -193,6 +195,7 @@ private:
     AnimatorPtr m_idleAnimator;
 
     uint32 m_quickLootFlags;
+    uint8 m_tier;
     uint8 m_phase;
     ticks_t m_lastPhase;
 

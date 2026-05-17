@@ -94,6 +94,7 @@ public:
     int getMinimapColor() { return rawGetThingType()->getMinimapColor(); }
     int getLensHelp() { return rawGetThingType()->getLensHelp(); }
     int getClothSlot() { return rawGetThingType()->getClothSlot(); }
+    uint16 getClassification();
     int getElevation() { return rawGetThingType()->getElevation(); }
     bool isGround() { return rawGetThingType()->isGround(); }
     bool isGroundBorder() { return rawGetThingType()->isGroundBorder(); }
@@ -155,4 +156,3 @@ protected:
 #pragma pack(pop)
 
 #endif
-

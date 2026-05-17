@@ -1395,14 +1395,21 @@ void Game::equipItem(const ItemPtr& item)
 {
     if (!item || !canPerformGameAction())
         return;
-    m_protocolGame->sendEquipItem(item->getId(), item->getCountOrSubType());
+    if (g_game.getFeature(Otc::GameThingUpgradeClassification) && item->getClassification() > 0)
+        m_protocolGame->sendEquipItemWithTier(item->getId(), item->getTier());
+    else
+        m_protocolGame->sendEquipItem(item->getId(), item->getCountOrSubType());
 }
 
 void Game::equipItemId(int itemId, int subType)
 {
     if (!canPerformGameAction())
         return;
-    m_protocolGame->sendEquipItem(itemId, subType);
+    const ThingTypePtr& thingType = g_things.getThingType(itemId, ThingCategoryItem);
+    if (g_game.getFeature(Otc::GameThingUpgradeClassification) && thingType && thingType->getClassification() > 0)
+        m_protocolGame->sendEquipItemWithTier(itemId, subType);
+    else
+        m_protocolGame->sendEquipItem(itemId, subType);
 }
 
 void Game::mount(bool mount)

@@ -125,6 +125,7 @@ void ProtocolGame::sendLoginPacket(uint challengeTimestamp, uint8 challengeRando
             version += "0";
         }
         msg->addU16(atoi(version.c_str()));
+        msg->addString(std::string("OTCv8TierByte"));
     }
 
     // encrypt with RSA
@@ -355,6 +356,15 @@ void ProtocolGame::sendEquipItem(int itemId, int countOrSubType)
         msg->addU16(countOrSubType);
     else
         msg->addU8(countOrSubType);
+    send(msg);
+}
+
+void ProtocolGame::sendEquipItemWithTier(int itemId, int tier)
+{
+    auto msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientEquipItem);
+    msg->addU16(itemId);
+    msg->addU8(tier);
     send(msg);
 }
 

@@ -74,9 +74,10 @@ function updateFeatures(version)
             g_game.enableFeature(GameSpritesU32) -- Extended sprites
             --g_game.enableFeature(GameSpritesAlphaChannel) -- Transparency
 			g_game.enableFeature(GameDoublePlayerGoodsMoney)
-		 	g_game.enableFeature(GameCreatureIcons)
+			g_game.enableFeature(GameCreatureIcons)
 			g_game.enableFeature(GamePurseSlot)
-             g_game.enableFeature(GamePrey)
+			g_game.enableFeature(GameThingUpgradeClassification)
+			g_game.enableFeature(GamePrey)
 
 			  g_game.enableFeature(GameSpritesU32) -- Extended sprites
 			   --g_game.enableFeature(GameDoubleExperience) -- Extended sprites

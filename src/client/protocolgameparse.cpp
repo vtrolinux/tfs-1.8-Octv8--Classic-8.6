@@ -3608,6 +3608,12 @@ ItemPtr ProtocolGame::getItem(const InputMessagePtr& msg, int id, bool hasDescri
         }
     }
 
+    if (g_game.getFeature(Otc::GameItemTierByte)) {
+        item->setTier(msg->getU8());
+    } else if (g_game.getFeature(Otc::GameThingUpgradeClassification) && item->getClassification() > 0) {
+        item->setTier(msg->getU8());
+    }
+
     if (g_game.getFeature(Otc::GameItemAnimationPhase)) {
         if (item->getAnimationPhases() > 1) {
             // 0x00 => automatic phase

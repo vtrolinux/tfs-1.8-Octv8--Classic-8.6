@@ -603,6 +603,8 @@ function onInventoryChange(player, slot, item, oldItem)
         itemWidget:setStyle(InventorySlotStyles[slot])
         itemWidget:setItem(nil)
     end
+
+    ItemsDatabase.setTier(itemWidget, item)
 end
 
 

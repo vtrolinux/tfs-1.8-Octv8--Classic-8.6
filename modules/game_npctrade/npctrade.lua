@@ -355,6 +355,7 @@ function refreshTradeItems()
     itemBox:setText(text)
     local itemWidget = itemBox:getChildById('item')
     itemWidget:setItem(item.ptr)
+    ItemsDatabase.setTier(itemWidget, item.ptr)
     itemWidget.onMouseRelease = itemPopup
     radioItems:addWidget(itemBox)
   end

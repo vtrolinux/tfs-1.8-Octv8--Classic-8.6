@@ -60,6 +60,7 @@ function fillTrade(name, items, counter)
 		local itemWidget = g_ui.createWidget("Item", tradeContainer)
 
 		itemWidget:setItem(item)
+		ItemsDatabase.setTier(itemWidget, item)
 
 		-- No rarity logic
 

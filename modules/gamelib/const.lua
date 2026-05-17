@@ -226,8 +226,10 @@ GameItemCustomAttributes = 126
 GameAnimatedTextCustomFont = 127
 GameDrawFloorShadow = 128
 GameDisplayItemDuration = 129
+GameThingUpgradeClassification = 130
+GameItemTierByte = 131
 
-LastGameFeature = 130
+LastGameFeature = 132
         
 TextColors = {
   red       = '#f55e5e', --'#c83200'

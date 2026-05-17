@@ -412,6 +412,7 @@ void Client::registerLuaFunctions()
     g_lua.bindClassMemberFunction<Thing>("getStackPriority", &Thing::getStackPriority);
     g_lua.bindClassMemberFunction<Thing>("getStackPos", &Thing::getStackPos);
     g_lua.bindClassMemberFunction<Thing>("getAnimationPhases", &Thing::getAnimationPhases);
+    g_lua.bindClassMemberFunction<Thing>("getClassification", &Thing::getClassification);
     g_lua.bindClassMemberFunction<Thing>("getTile", &Thing::getTile);
     g_lua.bindClassMemberFunction<Thing>("setMarked", &Thing::setMarked);
     g_lua.bindClassMemberFunction<Thing>("isItem", &Thing::isItem);
@@ -612,6 +613,7 @@ void Client::registerLuaFunctions()
     g_lua.bindClassMemberFunction<ThingType>("getMinimapColor", &ThingType::getMinimapColor);
     g_lua.bindClassMemberFunction<ThingType>("getLensHelp", &ThingType::getLensHelp);
     g_lua.bindClassMemberFunction<ThingType>("getClothSlot", &ThingType::getClothSlot);
+    g_lua.bindClassMemberFunction<ThingType>("getClassification", &ThingType::getClassification);
     g_lua.bindClassMemberFunction<ThingType>("getElevation", &ThingType::getElevation);
     g_lua.bindClassMemberFunction<ThingType>("isGround", &ThingType::isGround);
     g_lua.bindClassMemberFunction<ThingType>("isGroundBorder", &ThingType::isGroundBorder);
@@ -670,7 +672,9 @@ void Client::registerLuaFunctions()
     g_lua.bindClassMemberFunction<Item>("clearContainerItems", &Item::clearContainerItems);
     g_lua.bindClassMemberFunction<Item>("getContainerItem", &Item::getContainerItem);
     g_lua.bindClassMemberFunction<Item>("setCount", &Item::setCount);
+    g_lua.bindClassMemberFunction<Item>("setTier", &Item::setTier);
     g_lua.bindClassMemberFunction<Item>("getCount", &Item::getCount);
+    g_lua.bindClassMemberFunction<Item>("getTier", &Item::getTier);
     g_lua.bindClassMemberFunction<Item>("getSubType", &Item::getSubType);
     g_lua.bindClassMemberFunction<Item>("getCountOrSubType", &Item::getCountOrSubType);
     g_lua.bindClassMemberFunction<Item>("getId", &Item::getId);

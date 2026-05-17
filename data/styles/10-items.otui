@@ -9,6 +9,19 @@ Item < UIItem
   $disabled:
     color: #646464
 
+  UIWidget
+    id: tier
+    size: 9 8
+    image-source: /images/game/items/tiers-strip
+    image-clip: 0 0 9 8
+    image-size: 9 8
+    anchors.top: parent.top
+    anchors.right: parent.right
+    phantom: true
+    focusable: false
+    visible: false
+    image-smooth: true
+
 HotkeyItem < UIItem
   size: 34 34
   padding: 1
@@ -18,3 +31,16 @@ HotkeyItem < UIItem
 
   $disabled:
     color: #646464
+
+  UIWidget
+    id: tier
+    size: 9 8
+    image-source: /images/game/items/tiers-strip
+    image-clip: 0 0 9 8
+    image-size: 9 8
+    anchors.top: parent.top
+    anchors.right: parent.right
+    phantom: true
+    focusable: false
+    visible: false
+    image-smooth: true
