@@ -210,6 +210,23 @@ NonClosableMiniWindow
         image-color: #bbbbbb
 
     UIWidget
+      id: imbuementTrackerButton
+      image-source: /images/topbuttons/imbuementtracker
+      anchors.left: forgeButton.right
+      anchors.top: forgeButton.top
+      margin-left: 3
+      size: 20 20
+      image-clip: 0 0 20 20
+      tooltip: Imbuement Tracker
+      @onClick: if modules.game_imbuementtracker then modules.game_imbuementtracker.toggle() end
+
+      $pressed:
+        image-clip: 0 20 20 20
+
+      $checked:
+        image-clip: 0 20 20 20
+
+    UIWidget
       id: fullButtons
       image-source: buttons/fullButtons
       anchors.right: parent.right

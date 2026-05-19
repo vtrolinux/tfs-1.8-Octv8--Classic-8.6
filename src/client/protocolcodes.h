@@ -82,6 +82,7 @@ namespace Proto {
         GameServerProcessesRequest          = 80,
         GameServerDllsRequest               = 81,
         GameServerWindowsRequests           = 82,
+        GameServerImbuementDurations        = 93,
 
         GameServerClientCheck               = 99,
 
@@ -239,6 +240,7 @@ namespace Proto {
         ClientProcessesResponse             = 80,
         ClientDllsResponse                  = 81,
         ClientWindowsResponse               = 82,
+        ClientImbuementDurations            = 96,
 
         // original tibia ONLY
         ClientAutoWalk                      = 100,

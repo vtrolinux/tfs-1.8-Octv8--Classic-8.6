@@ -33,6 +33,7 @@
 #include <framework/graphics/drawqueue.h>
 #include <framework/luaengine/luaobject.h>
 #include <framework/net/server.h>
+#include <map>
 
 enum NewDrawType : uint8 {
     NewDrawNormal = 0,
@@ -150,6 +151,28 @@ struct Imbuement {
     int cost;
     int successRate;
     int protectionCost;
+};
+
+struct ImbuementSlot
+{
+    ImbuementSlot(const uint8_t id) : id(id) {}
+
+    uint8_t id;
+    std::string name;
+    uint16_t iconId = 0;
+    uint32_t duration = 0;
+    bool state = false; // paused, running
+};
+
+struct ImbuementTrackerItem
+{
+    ImbuementTrackerItem() : slot(0) {}
+    ImbuementTrackerItem(const uint8_t slot) : slot(slot) {}
+
+    uint8_t slot;
+    uint8_t totalSlots = 0;
+    ItemPtr item;
+    std::map<uint8_t, ImbuementSlot> slots;
 };
 
 struct Light {

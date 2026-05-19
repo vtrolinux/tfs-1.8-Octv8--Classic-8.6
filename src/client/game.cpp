@@ -1532,6 +1532,13 @@ void Game::closeImbuingWindow()
     m_protocolGame->sendCloseImbuingWindow();
 }
 
+void Game::imbuementDurations(const bool isOpen)
+{
+    if (!canPerformGameAction())
+        return;
+    m_protocolGame->sendImbuementDurations(isOpen);
+}
+
 void Game::ping()
 {
     if(!m_protocolGame || !m_protocolGame->isConnected())

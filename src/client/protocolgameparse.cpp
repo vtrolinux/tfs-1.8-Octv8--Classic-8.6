@@ -485,6 +485,9 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
             case Proto::GameServerCloseImbuementWindow:
                 parseCloseImbuementWindow(msg);
                 break;
+            case Proto::GameServerImbuementDurations:
+                parseImbuementDurations(msg);
+                break;
             case Proto::GameServerCyclopediaNewDetails:
                 parseCyclopediaNewDetails(msg);
                 break;
@@ -2944,6 +2947,45 @@ void ProtocolGame::parseImbuementWindow(const InputMessagePtr& msg)
 void ProtocolGame::parseCloseImbuementWindow(const InputMessagePtr&)
 {
     g_lua.callGlobalField("g_game", "onCloseImbuementWindow");
+}
+
+void ProtocolGame::parseImbuementDurations(const InputMessagePtr& msg)
+{
+    const uint8_t itemListCount = msg->getU8(); // amount of items to display
+    std::vector<ImbuementTrackerItem> itemList;
+
+    for (auto i = 0; i < itemListCount; ++i) {
+        ImbuementTrackerItem item(msg->getU8()); // slot
+        item.item = getItem(msg);
+
+        std::map<uint8_t, ImbuementSlot> slots;
+
+        const uint8_t slotsCount = msg->getU8(); // total amount of imbuing slots on item
+        item.totalSlots = slotsCount; // Store the total number of slots
+        if (slotsCount == 0) {
+            itemList.emplace_back(item); // Still add the item even if it has no slots for completeness
+            continue;
+        }
+
+        for (auto slotIndex = 0; slotIndex < slotsCount; ++slotIndex) {
+            const bool slotImbued = static_cast<bool>(msg->getU8()); // 0 - empty, 1 - imbued
+            if (!slotImbued) {
+                continue;
+            }
+
+            ImbuementSlot slot(slotIndex);
+            slot.name = msg->getString();
+            slot.iconId = msg->getU16();
+            slot.duration = msg->getU32();
+            slot.state = msg->getU8(); // 0 - paused, 1 - decaying
+            slots.emplace(slotIndex, slot);
+        }
+
+        item.slots = slots;
+        itemList.emplace_back(item);
+    }
+
+    g_lua.callGlobalField("g_game", "onUpdateImbuementTracker", itemList);
 }
 
 void ProtocolGame::parseCyclopedia(const InputMessagePtr& msg)

@@ -58,7 +58,13 @@ bool Shader::compileSourceCode(const std::string& sourceCode)
     code.append(sourceCode);
     const char* c_source = code.c_str();
 #else
-    const char* c_source = sourceCode.c_str();
+    static const char *qualifierDefines =
+        "#define lowp\n"
+        "#define mediump\n"
+        "#define highp\n";
+    std::string code = qualifierDefines;
+    code.append(sourceCode);
+    const char* c_source = code.c_str();
 #endif
     glShaderSource(m_shaderId, 1, &c_source, NULL);
     glCompileShader(m_shaderId);
