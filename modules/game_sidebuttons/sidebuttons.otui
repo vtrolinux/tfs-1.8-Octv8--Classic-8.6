@@ -227,6 +227,23 @@ NonClosableMiniWindow
         image-clip: 0 20 20 20
 
     UIWidget
+      id: testHtmlButton
+      image-source: /images/topbuttons/modulemanager
+      anchors.left: imbuementTrackerButton.right
+      anchors.top: forgeButton.top
+      margin-left: 3
+      size: 20 20
+      image-clip: 0 0 20 20
+      tooltip: Teste HTML
+      @onClick: modules.game_sidebuttons.toggleTestHtml()
+
+      $pressed:
+        image-clip: 0 20 20 20
+
+      $checked:
+        image-clip: 0 20 20 20
+
+    UIWidget
       id: fullButtons
       image-source: buttons/fullButtons
       anchors.right: parent.right

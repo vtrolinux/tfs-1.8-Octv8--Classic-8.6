@@ -848,7 +848,14 @@ void UIWidget::setLineHeight(const std::string& valueStr) {
     const std::string_view sv = mutableStr;
     const Unit unit = detectUnit(sv);
     std::string numStr = std::string(numericPart(sv));
-    int16_t num = numStr.empty() ? 0 : static_cast<int16_t>(std::stoi(numStr));
+    int16_t num = 0;
+    if (unit != Unit::Auto && unit != Unit::FitContent && !numStr.empty()) {
+        try {
+            num = static_cast<int16_t>(std::stoi(numStr));
+        } catch (const std::exception&) {
+            num = 0;
+        }
+    }
     m_lineHeight = { unit, num, num, true };
 }
 
@@ -860,7 +867,14 @@ void UIWidget::applyDimension(bool isWidth, const std::string& valueStr) {
     const std::string_view sv = mutableStr;
     const Unit unit = detectUnit(sv);
     std::string numStr = std::string(numericPart(sv));
-    int16_t num = numStr.empty() ? 0 : static_cast<int16_t>(std::stoi(numStr));
+    int16_t num = 0;
+    if (unit != Unit::Auto && unit != Unit::FitContent && !numStr.empty()) {
+        try {
+            num = static_cast<int16_t>(std::stoi(numStr));
+        } catch (const std::exception&) {
+            num = 0;
+        }
+    }
     applyDimension(isWidth, unit, num);
     if (m_htmlNode)
         m_htmlNode->getStyles()["styles"][isWidth ? "width" : "height"] = { mutableStr , "" };
@@ -1368,10 +1382,28 @@ void UIWidget::setOverflow(OverflowType type) {
     }
 }
 
+void UIWidget::setPositionType(PositionType type) {
+    m_positionType = type;
+
+    if (m_positionType == PositionType::Absolute) {
+        applyDimension(true, m_width.unit, m_width.value);
+        applyDimension(false, m_height.unit, m_height.value);
+    }
+
+    refreshHtml();
+}
+
 void UIWidget::setPositions(std::string_view type, std::string_view value) {
     const Unit unit = detectUnit(value);
     std::string numStr = std::string(numericPart(value));
-    int16_t v = numStr.empty() ? 0 : static_cast<int16_t>(std::stoi(numStr));
+    int16_t v = 0;
+    if (unit != Unit::Auto && unit != Unit::FitContent && !numStr.empty()) {
+        try {
+            v = static_cast<int16_t>(std::stoi(numStr));
+        } catch (const std::exception&) {
+            v = 0;
+        }
+    }
 
     if (type == "top") {
         m_positions.top.unit = unit;
@@ -1401,6 +1433,22 @@ void UIWidget::setDisplay(DisplayType type) {
         setVisible(true);
 
     scheduleHtmlTask(PropApplyAnchorAlignment);
+}
+
+void UIWidget::setResultConditionIf(bool v) {
+    if (!v) {
+        if (m_displayType != DisplayType::None)
+            m_originalDisplayType = m_displayType;
+        setDisplay(DisplayType::None);
+        return;
+    }
+
+    if (m_displayType == DisplayType::None) {
+        auto display = m_originalDisplayType;
+        if (display == DisplayType::None)
+            display = DisplayType::Block;
+        setDisplay(display);
+    }
 }
 
 void UIWidget::ensureUniqueId() {
@@ -1701,7 +1749,7 @@ void UIWidget::applyAnchorAlignment() {
     if (m_displayType == DisplayType::None)
         return;
 
-    if (!hasAnchoredLayout())
+    if (!getAnchoredLayout())
         return;
 
     if (m_placement != Fw::AlignNone) {
@@ -1745,6 +1793,9 @@ void UIWidget::applyAnchorAlignment() {
     }
 
     const DisplayType parentDisplay = m_parent ? m_parent->m_displayType : DisplayType::Block;
+
+    if (isFlexContainer(parentDisplay))
+        return;
 
     FloatType effFloat = mapLogicalFloat(getFloat());
     if (isFlexContainer(parentDisplay) || isGridContainer(parentDisplay) || isTableContainer(parentDisplay) || m_positionType == PositionType::Absolute) {
