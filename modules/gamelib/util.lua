@@ -52,11 +52,6 @@ function formatMoney(amount, separator)
   return formatted
 end
 
-if not setStringColor then
-  function setStringColor(str, color)
-    return str  -- ignora a cor e retorna o texto puro
-  end
-end
 
 function convertLongGold(amount, shortValue, normalized)
     local hasBillion = false

@@ -72,3 +72,14 @@ function string:contains(str, checkCase, start, plain)
 
 	return string.find(self, str, start and start or 1, plain == nil and true or false)
 end
+
+function setStringColor(t, text, color)
+    table.insert(t, text)
+    table.insert(t, color)
+end
+
+function setStringFont(t, text, color, font)
+  table.insert(t, text)
+  table.insert(t, color)
+  table.insert(t, font)
+end
