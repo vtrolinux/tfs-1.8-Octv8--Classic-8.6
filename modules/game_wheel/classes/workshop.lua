@@ -269,15 +269,21 @@ function Workshop.onSelectChild(list, selected)
 			basicWidget:setVisible(false)
 			supremeWidget:setVisible(true)
 			supremeWidget:setImageClip(modID * imageClipSize .. " 0 " .. imageClipSize .. " " .. imageClipSize)
-			supremeWidget:setShader(isActive and '' or 'image_black_white')
+			if supremeWidget.setShader then
+				supremeWidget:setShader(isActive and '' or 'image_black_white')
+			end
 		else
 			supremeWidget:setVisible(false)
 			basicWidget:setVisible(true)
 			basicWidget:setImageClip(modID * imageClipSize .. " 0 " .. imageClipSize .. " " .. imageClipSize)
-			basicWidget:setShader(isActive and '' or 'image_black_white')
+			if basicWidget.setShader then
+				basicWidget:setShader(isActive and '' or 'image_black_white')
+			end
 		end
 
-        backDrop:setShader(isActive and '' or 'image_black_white')
+		if backDrop.setShader then
+			backDrop:setShader(isActive and '' or 'image_black_white')
+		end
         gradeWidget:setColor(isActive and activeColor or inactiveColor)
         bonusWidget:setColor(isActive and activeColor or inactiveColor)
         backMidle:setVisible(isActive)

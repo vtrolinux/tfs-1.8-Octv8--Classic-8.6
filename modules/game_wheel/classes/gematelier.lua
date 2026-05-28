@@ -415,7 +415,11 @@ function GemAtelier.showGemRevelation()
 		itemWidget:setItemId(data[i].id)
 		gemInfo:setText(data[i].name:gsub("%d", resources[i]))
 		gemInfo:setMarginTop(60)
-		if not gemInfo:isTextWrap() then
+		local isTextWrap = false
+		if gemInfo.isTextWrap then
+			isTextWrap = gemInfo:isTextWrap()
+		end
+		if not isTextWrap then
 			gemInfo:setMarginTop(67)
 		end
 
@@ -756,12 +760,12 @@ function GemAtelier.setupModAvailable(widget, gemType, vesselCount, gemData)
 	modLabel:setVisible(true)
 
 	if GemAtelier.isVesselAvailable(gemDomain, vesselCount) then
-		fragmentType:setShader("")
-		modItem:setShader("")
+		if fragmentType.setShader then fragmentType:setShader("") end
+		if modItem.setShader then modItem:setShader("") end
 		modLabel:setColor("#c0c0c0")
 	else
-		fragmentType:setShader("image_black_white")
-		modItem:setShader("image_black_white")
+		if fragmentType.setShader then fragmentType:setShader("image_black_white") end
+		if modItem.setShader then modItem:setShader("image_black_white") end
 		modLabel:setColor("#707070")
 	end
 
