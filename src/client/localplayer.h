@@ -25,6 +25,8 @@
 
 #include "player.h"
 #include "walkmatrix.h"
+#include "const.h"
+#include <map>
 
 // @bindclass
 class LocalPlayer : public Player
@@ -70,6 +72,7 @@ public:
     void setOfflineTrainingTime(double offlineTrainingTime);
     void setSpells(const std::vector<int>& spells);
     void setBlessings(int blessings);
+    void setResourceBalance(Otc::ResourceTypes_t type, uint64_t value);
 
     int getStates() { return m_states; }
     int getSkillLevel(uint8_t skill) { return skill < m_skillsLevel.size() ? m_skillsLevel[skill] : 0; }
@@ -95,6 +98,15 @@ public:
     std::vector<int> getSpells() { return m_spells; }
     ItemPtr getInventoryItem(Otc::InventorySlot inventory) { return m_inventoryItems[inventory]; }
     int getBlessings() { return m_blessings; }
+    uint64_t getResourceBalance(Otc::ResourceTypes_t type)
+    {
+        auto it = m_resourcesBalance.find(type);
+        return it != m_resourcesBalance.end() ? it->second : 0;
+    }
+    uint64_t getTotalMoney()
+    {
+        return getResourceBalance(Otc::RESOURCE_BANK_BALANCE) + getResourceBalance(Otc::RESOURCE_GOLD_EQUIPPED);
+    }
 
     bool hasSight(const Position& pos);
     bool isKnown() { return m_known; }
@@ -179,6 +191,7 @@ private:
     std::vector<int> m_skillsBaseLevel;
     std::vector<int> m_skillsLevelPercent;
     std::vector<int> m_spells;
+    std::map<Otc::ResourceTypes_t, uint64_t> m_resourcesBalance;
 
     int m_states;
     int m_vocation;

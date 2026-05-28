@@ -663,6 +663,16 @@ void LocalPlayer::setBlessings(int blessings)
     }
 }
 
+void LocalPlayer::setResourceBalance(Otc::ResourceTypes_t type, uint64_t value)
+{
+    uint64_t oldBalance = getResourceBalance(type);
+    if(value == oldBalance)
+        return;
+
+    m_resourcesBalance[type] = value;
+    g_lua.callGlobalField("g_game", "onResourcesBalanceChange", value, oldBalance, type);
+}
+
 bool LocalPlayer::hasSight(const Position& pos)
 {
     return m_position.isInRange(pos, g_map.getAwareRange().left - 1, g_map.getAwareRange().top - 1);

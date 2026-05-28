@@ -27,6 +27,7 @@
 #include <framework/luaengine/declarations.h>
 #include "game.h"
 #include "outfit.h"
+#include "staticdata.h"
 
 // outfit
 int push_luavalue(const Outfit& outfit);
@@ -59,5 +60,9 @@ bool luavalue_cast(int index, Light& light);
 // unjustified points
 int push_luavalue(const UnjustifiedPoints& unjustifiedPoints);
 bool luavalue_cast(int index, UnjustifiedPoints& unjustifiedPoints);
+
+// wheel gems
+int push_luavalue(const GemData& gem);
+bool luavalue_cast(int index, GemData& gem);
 
 #endif

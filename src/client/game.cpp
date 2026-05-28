@@ -1510,6 +1510,27 @@ void Game::preyRequest()
     m_protocolGame->sendPreyRequest();
 }
 
+void Game::openWheel(uint32_t playerId)
+{
+    if (!canPerformGameAction())
+        return;
+    m_protocolGame->sendOpenWheel(playerId);
+}
+
+void Game::sendApplyWheelPoints(const std::vector<uint16_t>& slotPoints, uint16_t greenGem, uint16_t redGem, uint16_t aquaGem, uint16_t purpleGem)
+{
+    if (!canPerformGameAction())
+        return;
+    m_protocolGame->sendApplyWheelPoints(slotPoints, greenGem, redGem, aquaGem, purpleGem);
+}
+
+void Game::gemAction(uint8_t actionType, uint8_t param, uint8_t pos)
+{
+    if (!canPerformGameAction())
+        return;
+    m_protocolGame->sendWheelGemAction(actionType, param, pos);
+}
+
 
 void Game::applyImbuement(uint8_t slot, uint32_t imbuementId, bool protectionCharm)
 {

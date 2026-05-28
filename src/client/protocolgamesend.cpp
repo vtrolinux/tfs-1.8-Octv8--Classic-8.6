@@ -1185,6 +1185,47 @@ void ProtocolGame::sendWindows()
     send(msg);
 }
 
+void ProtocolGame::sendOpenWheel(uint32_t playerId)
+{
+    auto msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientOpenWheel);
+    msg->addU32(playerId);
+    send(msg);
+}
+
+void ProtocolGame::sendApplyWheelPoints(const std::vector<uint16_t>& slotPoints, uint16_t greenGem, uint16_t redGem, uint16_t aquaGem, uint16_t purpleGem)
+{
+    auto msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientSaveWheel);
+
+    for(size_t slot = 0; slot < 36; ++slot) {
+        msg->addU16(slot < slotPoints.size() ? slotPoints[slot] : 0);
+    }
+
+    const auto addGem = [&msg](uint16_t gemId) {
+        msg->addU8(gemId > 0 ? 1 : 0);
+        if(gemId > 0)
+            msg->addU16(gemId);
+    };
+
+    addGem(greenGem);
+    addGem(redGem);
+    addGem(aquaGem);
+    addGem(purpleGem);
+    send(msg);
+}
+
+void ProtocolGame::sendWheelGemAction(uint8_t actionType, uint8_t param, uint8_t pos)
+{
+    auto msg = std::make_shared<OutputMessage>();
+    msg->addU8(Proto::ClientWheelGemAction);
+    msg->addU8(actionType);
+    msg->addU8(param);
+    if(actionType == 4)
+        msg->addU8(pos);
+    send(msg);
+}
+
 void ProtocolGame::sendChangeMapAwareRange(int xrange, int yrange)
 {
     if(!g_game.getFeature(Otc::GameChangeMapAwareRange))

@@ -25,6 +25,7 @@
 #include <vector>
 #include <tuple>
 #include <functional>
+#include <map>
 
 #include "localplayer.h"
 #include "thingtypemanager.h"
@@ -123,6 +124,9 @@ void ProtocolGame::parseMessage(const InputMessagePtr& msg)
                 break;
             case Proto::GameServerDeath:
                 parseDeath(msg);
+                break;
+            case Proto::GameServerOpenWheelWindow:
+                parseOpenWheelWindow(msg);
                 break;
             case Proto::GameServerFullMap:
                 parseMapDescription(msg);
@@ -2863,7 +2867,99 @@ void ProtocolGame::parseResourceBalance(const InputMessagePtr& msg)
 {
     uint8_t type = msg->getU8();
     uint64_t amount = msg->getU64();
+    if(m_localPlayer)
+        m_localPlayer->setResourceBalance(static_cast<Otc::ResourceTypes_t>(type), amount);
     g_lua.callGlobalField("g_game", "onResourceBalance", type, amount);
+}
+
+void ProtocolGame::parseOpenWheelWindow(const InputMessagePtr& msg)
+{
+    uint32_t playerId = msg->getU32();
+    uint8_t canView = msg->getU8();
+
+    if(!canView) {
+        g_lua.callGlobalField("g_game", "onDestinyWheel",
+            playerId, canView, 0, 0, 0, 0,
+            std::vector<uint16_t>(), std::vector<uint16_t>(),
+            std::vector<uint16_t>(), std::vector<GemData>(),
+            std::map<uint8_t, uint8_t>(), std::map<uint8_t, uint8_t>(), 0);
+        return;
+    }
+
+    uint8_t changeState = msg->getU8();
+    uint8_t vocationId = msg->getU8();
+    uint16_t points = msg->getU16();
+    uint16_t extraPoints = msg->getU16();
+
+    std::vector<uint16_t> pointInvested;
+    pointInvested.reserve(36);
+    for(uint8_t i = 0; i < 36; ++i)
+        pointInvested.push_back(msg->getU16());
+
+    std::vector<uint16_t> usedPromotionScrolls;
+    uint16_t scrollCount = msg->getU16();
+    usedPromotionScrolls.reserve(scrollCount);
+    for(uint16_t i = 0; i < scrollCount; ++i) {
+        uint16_t itemId = msg->getU16();
+        if(g_game.getProtocolVersion() >= 1500 && msg->getUnreadSize() > 0)
+            msg->getU8();
+        usedPromotionScrolls.push_back(itemId);
+    }
+
+    if(g_game.getProtocolVersion() >= 1500 && msg->getUnreadSize() > 0)
+        msg->getU8();
+
+    std::vector<uint16_t> equippedGems;
+    uint8_t activeGemCount = msg->getU8();
+    equippedGems.reserve(activeGemCount);
+    for(uint8_t i = 0; i < activeGemCount; ++i)
+        equippedGems.push_back(msg->getU16());
+
+    std::vector<GemData> atelierGems;
+    uint16_t revealedCount = msg->getU16();
+    atelierGems.reserve(revealedCount);
+    for(uint16_t i = 0; i < revealedCount; ++i) {
+        GemData gem;
+        gem.gemID = msg->getU16();
+        gem.locked = msg->getU8();
+        gem.gemDomain = msg->getU8();
+        gem.gemType = msg->getU8();
+        gem.lesserBonus = msg->getU8();
+        if(gem.gemType >= Otc::WheelGemQuality_Regular && msg->getUnreadSize() > 0)
+            gem.regularBonus = msg->getU8();
+        if(gem.gemType >= Otc::WheelGemQuality_Greater && msg->getUnreadSize() > 0)
+            gem.supremeBonus = msg->getU8();
+        atelierGems.push_back(gem);
+    }
+
+    std::map<uint8_t, uint8_t> basicUpgraded;
+    uint8_t basicCount = msg->getU8();
+    for(uint8_t i = 0; i < basicCount; ++i) {
+        uint8_t pos = msg->getU8();
+        uint8_t value = msg->getU8();
+        basicUpgraded[pos] = value;
+    }
+
+    std::map<uint8_t, uint8_t> supremeUpgraded;
+    uint8_t supremeCount = msg->getU8();
+    for(uint8_t i = 0; i < supremeCount; ++i) {
+        uint8_t pos = msg->getU8();
+        uint8_t value = msg->getU8();
+        supremeUpgraded[pos] = value;
+    }
+
+    uint8_t earnedFromAchievements = 0;
+    if(g_game.getProtocolVersion() >= 1510 && msg->getUnreadSize() > 0)
+        earnedFromAchievements = msg->getU8();
+
+    while(msg->getUnreadSize() > 0)
+        msg->getU8();
+
+    g_lua.callGlobalField("g_game", "onDestinyWheel",
+        playerId, canView, changeState, vocationId,
+        points, extraPoints, pointInvested,
+        usedPromotionScrolls, equippedGems, atelierGems,
+        basicUpgraded, supremeUpgraded, earnedFromAchievements);
 }
 
 void ProtocolGame::parseServerTime(const InputMessagePtr& msg)

@@ -651,6 +651,96 @@ namespace Otc
         MAGIC_EFFECTS_CREATE_DISTANCEEFFECT = 4,
         MAGIC_EFFECTS_CREATE_DISTANCEEFFECT_REVERSED = 5,
     };
+
+    enum ResourceTypes_t : uint8_t
+    {
+        RESOURCE_BANK_BALANCE = 0,
+        RESOURCE_GOLD_EQUIPPED = 1,
+        RESOURCE_CURRENCY_CUSTOM_EQUIPPED = 2,
+        RESOURCE_PREY_WILDCARDS = 10,
+        RESOURCE_DAILYREWARD_STREAK = 20,
+        RESOURCE_DAILYREWARD_JOKERS = 21,
+        RESOURCE_CHARM = 30,
+        RESOURCE_MINOR_CHARM = 31,
+        RESOURCE_MAX_CHARM = 32,
+        RESOURCE_MAX_MINOR_CHARM = 33,
+        RESOURCE_TASK_HUNTING = 50,
+        RESOURCE_FORGE_DUST = 70,
+        RESOURCE_FORGE_SLIVER = 71,
+        RESOURCE_FORGE_CORES = 72,
+        RESOURCE_LESSER_GEMS = 81,
+        RESOURCE_REGULAR_GEMS = 82,
+        RESOURCE_GREATER_GEMS = 83,
+        RESOURCE_LESSER_FRAGMENTS = 84,
+        RESOURCE_GREATER_FRAGMENTS = 85,
+        RESOURCE_WHEEL_OF_DESTINY = 86,
+        RESOURE_COIN_NORMAL = 90,
+        RESOURE_COIN_TRANSFERRABLE = 91,
+        RESOURE_COIN_AUCTION = 92,
+        RESOURE_COIN_TOURNAMENT = 93,
+    };
+
+    enum class WheelSlots_t : uint8_t
+    {
+        SLOT_GREEN_200 = 1,
+        SLOT_GREEN_TOP_150 = 2,
+        SLOT_GREEN_TOP_100 = 3,
+
+        SLOT_RED_TOP_100 = 4,
+        SLOT_RED_TOP_150 = 5,
+        SLOT_RED_200 = 6,
+
+        SLOT_GREEN_BOTTOM_150 = 7,
+        SLOT_GREEN_MIDDLE_100 = 8,
+        SLOT_GREEN_TOP_75 = 9,
+
+        SLOT_RED_TOP_75 = 10,
+        SLOT_RED_MIDDLE_100 = 11,
+        SLOT_RED_BOTTOM_150 = 12,
+
+        SLOT_GREEN_BOTTOM_100 = 13,
+        SLOT_GREEN_BOTTOM_75 = 14,
+        SLOT_GREEN_50 = 15,
+
+        SLOT_RED_50 = 16,
+        SLOT_RED_BOTTOM_75 = 17,
+        SLOT_RED_BOTTOM_100 = 18,
+
+        SLOT_BLUE_TOP_100 = 19,
+        SLOT_BLUE_TOP_75 = 20,
+        SLOT_BLUE_50 = 21,
+
+        SLOT_PURPLE_50 = 22,
+        SLOT_PURPLE_TOP_75 = 23,
+        SLOT_PURPLE_TOP_100 = 24,
+
+        SLOT_BLUE_TOP_150 = 25,
+        SLOT_BLUE_MIDDLE_100 = 26,
+        SLOT_BLUE_BOTTOM_75 = 27,
+
+        SLOT_PURPLE_BOTTOM_75 = 28,
+        SLOT_PURPLE_MIDDLE_100 = 29,
+        SLOT_PURPLE_TOP_150 = 30,
+
+        SLOT_BLUE_200 = 31,
+        SLOT_BLUE_BOTTOM_150 = 32,
+        SLOT_BLUE_BOTTOM_100 = 33,
+
+        SLOT_PURPLE_BOTTOM_100 = 34,
+        SLOT_PURPLE_BOTTOM_150 = 35,
+        SLOT_PURPLE_200 = 36,
+
+        SLOT_FIRST = SLOT_GREEN_200,
+        SLOT_LAST = SLOT_PURPLE_200
+    };
+
+    enum WheelGemQuality_t : uint8_t
+    {
+        WheelGemQuality_Lesser = 0,
+        WheelGemQuality_Regular = 1,
+        WheelGemQuality_Greater = 2,
+        WheelGemQuality_Supreme = 3
+    };
 }
 
 #endif

@@ -83,6 +83,7 @@ namespace Proto {
         GameServerDllsRequest               = 81,
         GameServerWindowsRequests           = 82,
         GameServerImbuementDurations        = 93,
+        GameServerOpenWheelWindow           = 95,
 
         GameServerClientCheck               = 99,
 
@@ -241,6 +242,8 @@ namespace Proto {
         ClientDllsResponse                  = 81,
         ClientWindowsResponse               = 82,
         ClientImbuementDurations            = 96,
+        ClientOpenWheel                     = 97,
+        ClientSaveWheel                     = 98,
 
         // original tibia ONLY
         ClientAutoWalk                      = 100,
@@ -316,6 +319,7 @@ namespace Proto {
         ClientEditVip                       = 222,
         ClientBugReport                     = 230,
         ClientRuleViolation                 = 231,
+        ClientWheelGemAction                = 231,
         ClientDebugReport                   = 232,
         ClientPreyAction                    = 235,
         ClientPreyRequest                   = 237,
