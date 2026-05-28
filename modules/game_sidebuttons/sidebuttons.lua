@@ -9,7 +9,7 @@ preyButton = nil
 preyTrackerButton = nil
 forgeButton = nil
 imbuementTrackerButton = nil
-testHtmlButton = nil
+wheelButton = nil
 spellsButton = nil
 ciclopediaButton = nil
 unjustifiedPointsButton = nil
@@ -35,7 +35,7 @@ function init()
 	preyTrackerButton = buttonsWindow:recursiveGetChildById("preyTrackerButton")
 	forgeButton = buttonsWindow:recursiveGetChildById("forgeButton")
 	imbuementTrackerButton = buttonsWindow:recursiveGetChildById("imbuementTrackerButton")
-	testHtmlButton = buttonsWindow:recursiveGetChildById("testHtmlButton")
+	wheelButton = buttonsWindow:recursiveGetChildById("wheelButton")
 	spellsButton = buttonsWindow:recursiveGetChildById("spellsButton")
 	ciclopediaButton = buttonsWindow:recursiveGetChildById("ciclopediaButton")
 	unjustifiedPointsButton = buttonsWindow:recursiveGetChildById("unjustifiedPointsButton")
@@ -79,7 +79,7 @@ function hideButtons()
 		preyTrackerButton,
 		forgeButton,
 		imbuementTrackerButton,
-		testHtmlButton,
+		wheelButton,
 		optionsButton,
 		logoutButton,
 		verticalSeparator
@@ -106,7 +106,7 @@ function showButtons()
 		preyTrackerButton,
 		forgeButton,
 		imbuementTrackerButton,
-		testHtmlButton,
+		wheelButton,
 		optionsButton,
 		logoutButton,
 		verticalSeparator
@@ -118,16 +118,7 @@ function showButtons()
 	buttonsWindow:setHeight(103)
 end
 
-function toggleTestHtml()
-	local module = g_modules.getModule("test_html")
-	if module and not module:isLoaded() then
-		g_modules.ensureModuleLoaded("test_html")
-	end
 
-	if modules.test_html and modules.test_html.toggle then
-		modules.test_html.toggle()
-	end
-end
 
 function toggle()
 	if not fullButtons then

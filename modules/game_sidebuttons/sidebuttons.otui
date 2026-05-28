@@ -227,38 +227,20 @@ NonClosableMiniWindow
         image-clip: 0 20 20 20
 
     UIWidget
-      id: testHtmlButton
-      image-source: /images/topbuttons/modulemanager
+      id: wheelButton
+      image-source: buttons/wheel
       anchors.left: imbuementTrackerButton.right
       anchors.top: forgeButton.top
       margin-left: 3
       size: 20 20
-      image-clip: 0 0 20 20
-      tooltip: Teste HTML
-      @onClick: modules.game_sidebuttons.toggleTestHtml()
+      tooltip: Wheel of Destiny
+      @onClick: if modules.game_wheel then modules.game_wheel.toggle() end
 
       $pressed:
-        image-clip: 0 20 20 20
+        image-color: #bbbbbb
 
       $checked:
-        image-clip: 0 20 20 20
-
-    UIWidget
-      id: rmluiTestButton
-      image-source: buttons/questlog
-      anchors.left: testHtmlButton.right
-      anchors.top: forgeButton.top
-      margin-left: 3
-      size: 20 20
-      image-clip: 0 0 20 20
-      tooltip: RmlUi Test
-      @onClick: TestRmlUi2.toggle()
-
-      $pressed:
-        image-clip: 0 20 20 20
-
-      $checked:
-        image-clip: 0 20 20 20
+        image-color: #bbbbbb
 
     UIWidget
       id: fullButtons
