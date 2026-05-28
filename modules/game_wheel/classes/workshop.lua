@@ -287,9 +287,9 @@ function Workshop.onSelectChild(list, selected)
 		backDrop:setVisible(true)
         gradeWidget:setColor(isActive and activeColor or inactiveColor)
         bonusWidget:setColor(isActive and activeColor or inactiveColor)
-        -- OTCv8 Classic can draw this layer as a solid green circle over the
-        -- grade art, so keep the official medallion frames unobstructed here.
-        backMidle:setVisible(false)
+        -- Keep the green CIP animation only on the current grade. Showing it on
+        -- every unlocked grade makes OTCv8 Classic cover the medallion art.
+        backMidle:setVisible(isActive and i == maxTier)
         if backLine then
             backLine:setVisible(isActive)
         end
