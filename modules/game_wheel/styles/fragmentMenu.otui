@@ -228,7 +228,6 @@ Panel
           image-source: /images/game/wheel/backdrop_modgrades
           image-clip: 150 0 50 50
           phantom: true
-          image-shader: image_black_white
           UIWidget
             id: basicMod3
             size: 30 30
@@ -238,7 +237,6 @@ Panel
             image-smooth: true
             image-clip: 0 0 30 30
             phantom: true
-            image-shader: image_black_white
           UIWidget
             id: supremeMod3
             size: 35 35
@@ -250,7 +248,6 @@ Panel
             image-smooth: true
             image-clip: 0 0 35 35
             phantom: true
-            image-shader: image_black_white
 
       UIWidget
         id: bgLine3
@@ -286,7 +283,6 @@ Panel
           image-source: /images/game/wheel/backdrop_modgrades
           image-clip: 100 0 50 50
           phantom: true
-          image-shader: image_black_white
           UIWidget
             id: basicMod2
             size: 30 30
@@ -296,7 +292,6 @@ Panel
             image-smooth: true
             image-clip: 0 0 30 30
             phantom: true
-            image-shader: image_black_white
           UIWidget
             id: supremeMod2
             size: 35 35
@@ -308,7 +303,6 @@ Panel
             image-smooth: true
             image-clip: 0 0 35 35
             phantom: true
-            image-shader: image_black_white
 
       UIWidget
         id: bgLine2
@@ -343,7 +337,6 @@ Panel
           image-source: /images/game/wheel/backdrop_modgrades
           image-clip: 50 0 50 50
           phantom: true
-          image-shader: image_black_white
           UIWidget
             id: basicMod1
             size: 30 30
@@ -353,7 +346,6 @@ Panel
             image-smooth: true
             image-clip: 0 0 30 30
             phantom: true
-            image-shader: image_black_white
           UIWidget
             id: supremeMod1
             size: 35 35
@@ -365,7 +357,6 @@ Panel
             image-smooth: true
             image-clip: 0 0 35 35
             phantom: true
-            image-shader: image_black_white
 
       UIWidget
         id: bgLine1
@@ -431,6 +422,7 @@ Panel
         !text: tr('Grade IV')
         font: Verdana Bold-11px
         color: #707070
+        text-auto-resize: true
       Label
         id: bonus3
         anchors.horizontalCenter: prev.horizontalCenter
@@ -451,6 +443,7 @@ Panel
         !text: tr('Grade III')
         font: Verdana Bold-11px
         color: #707070
+        text-auto-resize: true
       Label
         id: bonus2
         anchors.horizontalCenter: prev.horizontalCenter
@@ -471,6 +464,7 @@ Panel
         !text: tr('Grade II')
         font: Verdana Bold-11px
         color: #707070
+        text-auto-resize: true
       Label
         id: bonus1
         anchors.horizontalCenter: prev.horizontalCenter
@@ -491,6 +485,7 @@ Panel
         !text: tr('Grade I')
         font: Verdana Bold-11px
         color: #c0c0c0
+        text-auto-resize: true
       Label
         id: bonus0
         anchors.horizontalCenter: prev.horizontalCenter

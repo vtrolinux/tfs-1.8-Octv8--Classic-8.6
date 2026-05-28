@@ -270,27 +270,26 @@ function Workshop.onSelectChild(list, selected)
 			supremeWidget:setVisible(true)
 			supremeWidget:setImageClip(modID * imageClipSize .. " 0 " .. imageClipSize .. " " .. imageClipSize)
 			if supremeWidget.setShader then
-				supremeWidget:setShader(isActive and '' or 'image_black_white')
+				supremeWidget:setShader('')
 			end
 		else
 			supremeWidget:setVisible(false)
 			basicWidget:setVisible(true)
 			basicWidget:setImageClip(modID * imageClipSize .. " 0 " .. imageClipSize .. " " .. imageClipSize)
 			if basicWidget.setShader then
-				basicWidget:setShader(isActive and '' or 'image_black_white')
+				basicWidget:setShader('')
 			end
 		end
 
 		if backDrop.setShader then
-			backDrop:setShader(isActive and '' or 'image_black_white')
+			backDrop:setShader('')
 		end
 		backDrop:setVisible(true)
         gradeWidget:setColor(isActive and activeColor or inactiveColor)
         bonusWidget:setColor(isActive and activeColor or inactiveColor)
-        -- OTCv8 Classic renders the green animation layer above the medallion on
-        -- some builds. Keep the official grade medallions visible and use the
-        -- animation only for the current enhance target.
-        backMidle:setVisible(isActive and i == maxTier and maxTier < 3)
+        -- OTCv8 Classic can draw this layer as a solid green circle over the
+        -- grade art, so keep the official medallion frames unobstructed here.
+        backMidle:setVisible(false)
         if backLine then
             backLine:setVisible(isActive)
         end
