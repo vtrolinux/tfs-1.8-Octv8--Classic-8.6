@@ -77,10 +77,15 @@ function init()
 	connect(g_game, {
 		onGameStart = check,
 		onGameEnd = hide,
-		onResourceBalance = onResourceBalance
+		onResourceBalance = onResourceBalance,
+		onPreyFreeRolls = onPreyFreeRolls,
+		onPreyTimeLeft = onPreyTimeLeft,
+		onPreyPrice = onPreyPrice,
+		onPreyLocked = onPreyLocked,
+		onPreyInactive = onPreyInactive,
+		onPreyActive = onPreyActive,
+		onPreySelection = onPreySelection
 	})
-
-	ProtocolGame.registerOpcode(PREY_OPCODE_SEND, onPreyMessage)
 
 	preyWindow = g_ui.displayUI("prey")
 
@@ -151,19 +156,19 @@ local function sendPreyMessage(opcode, slot, value)
 end
 
 function requestOpen()
-	sendPreyMessage(PREY_OPCODE_OPEN)
+	g_game.preyRequest()
 end
 
 function requestSelect(slot, listIndex)
-	sendPreyMessage(PREY_OPCODE_SELECT, slot, listIndex)
+	g_game.preyAction(slot, PREY_ACTION_MONSTERSELECTION, listIndex)
 end
 
 function requestListReroll(slot)
-	sendPreyMessage(PREY_OPCODE_LIST_REROLL, slot)
+	g_game.preyAction(slot, PREY_ACTION_LISTREROLL, 0)
 end
 
 function requestBonusReroll(slot)
-	sendPreyMessage(PREY_OPCODE_BONUS_REROLL, slot)
+	g_game.preyAction(slot, PREY_ACTION_BONUSREROLL, 0)
 end
 
 function requestClear(slot)
@@ -256,7 +261,7 @@ end
 local function updateWildcardBalance(wildcards)
 	bonusRerolls = wildcards
 	if preyWindow and preyWindow.wildCards then
-		preyWindow.wildCards:setText(tostring(wildcards))
+		preyWindow.wildCards.text:setText(tostring(wildcards))
 	end
 end
 
@@ -387,10 +392,15 @@ function terminate()
 	disconnect(g_game, {
 		onGameStart = check,
 		onGameEnd = hide,
-		onResourceBalance = onResourceBalance
+		onResourceBalance = onResourceBalance,
+		onPreyFreeRolls = onPreyFreeRolls,
+		onPreyTimeLeft = onPreyTimeLeft,
+		onPreyPrice = onPreyPrice,
+		onPreyLocked = onPreyLocked,
+		onPreyInactive = onPreyInactive,
+		onPreyActive = onPreyActive,
+		onPreySelection = onPreySelection
 	})
-
-	ProtocolGame.unregisterOpcode(PREY_OPCODE_SEND)
 
 	preyButton = nil
 	preyTrackerButton = nil
@@ -630,24 +640,14 @@ function onPreyLocked(slot, unlockState, timeUntilFreeReroll)
 	prey.locked:show()
 end
 
-function onPreyInactive(slot, timeUntilFreeReroll, currentHolderName, currentHolderOutfit)
+function onPreyInactive(slot, timeUntilFreeReroll)
 	local tracker = preyTracker.contentsPanel["slot" .. slot + 1]
-	local holderName = currentHolderName and currentHolderName ~= "" and capitalFormatStr(currentHolderName) or "Inactive"
+	local holderName = "Inactive"
 	local tooltip = "Inactive Prey. \n\nClick in this window to open the prey dialog."
 
-	if holderName ~= "Inactive" then
-		tooltip = "Creature: " .. holderName .. "\nStatus: Inactive\n\nClick in this window to open the prey dialog."
-	end
-
 	if tracker then
-		if currentHolderOutfit then
-			tracker.creature:setOutfit(currentHolderOutfit)
-			tracker.creature:show()
-			tracker.noCreature:hide()
-		else
-			tracker.creature:hide()
-			tracker.noCreature:show()
-		end
+		tracker.creature:hide()
+		tracker.noCreature:show()
 		tracker.creatureName:setText(holderName)
 		tracker.time:setPercent(0)
 		tracker.preyType:setImageSource("/images/game/prey/prey_no_bonus")
@@ -982,6 +982,9 @@ function onPreySelection(slot, bonusType, bonusValue, bonusGrade, names, outfits
 end
 
 function onResourceBalance(type, balance)
+	type = tonumber(type)
+	balance = tonumber(balance) or 0
+
 	if type == 0 then
 		bankGold = balance
 	elseif type == 1 then
@@ -989,11 +992,11 @@ function onResourceBalance(type, balance)
 	elseif type == 10 then
 		bonusRerolls = balance
 
-		preyWindow.wildCards:setText(balance)
+		preyWindow.wildCards.text:setText(tostring(balance))
 	end
 
 	if type == 0 or type == 1 then
-		preyWindow.gold:setText(comma_value(bankGold + inventoryGold))
+		preyWindow.gold.text:setText(comma_value(bankGold + inventoryGold))
 	end
 end
 
